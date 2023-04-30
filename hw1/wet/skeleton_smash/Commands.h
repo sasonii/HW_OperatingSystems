@@ -127,7 +127,7 @@ public:
     };
     // TODO: Add your data members
 private:
-    List <JobEntry> jobsList;
+    list <JobEntry> jobsList;
     int maxJobID;
 
 public:

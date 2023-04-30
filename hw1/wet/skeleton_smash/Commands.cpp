@@ -81,7 +81,7 @@ void _removeBackgroundSign(char* cmd_line) {
 // TODO: Add your implementation for classes in Commands.h
 
 JobsList::JobsList(){
-    jobsList = new List<JobEntry>;
+    jobsList = List<JobEntry>();
 }
 JobsList::~JobsList(){}
 void addJob(Command* cmd, bool isStopped = false){

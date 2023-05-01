@@ -137,11 +137,11 @@ void SmallShell::executeCommand(const char *cmd_line) {
 
 // BUILT-IN COMMANDS //
 void ChangePrompt::execute() {
-    if(argc <= 1){
-        SmallShell::getInstance().prompt = std::string("smash";
+    if(argc == 1){
+        SmallShell::getInstance().changePrompt(std::string("smash"));
     }
     else {
-        SmallShell::getInstance().prompt = std::string("smash";
+        SmallShell::getInstance().changePrompt(std::string(argv[1]));
     }
 }
 
@@ -153,4 +153,9 @@ Command::Command(const char *cmd_line){
 }
 Command::~Command(){
     delete[] argv;
+}
+
+// SMALL SHELL //
+SmallShell::changePrompt(std::string& s){
+    prompt = s;
 }

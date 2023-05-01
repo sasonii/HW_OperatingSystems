@@ -95,9 +95,91 @@ void removeJobById(int jobId);
 JobsList::JobEntry * getLastJob(int* lastJobId);
 JobsList::JobEntry *getLastStoppedJob(int *jobId);
 
+// BUILT-IN COMMANDS //
+void ChangePrompt::execute() {
+    if(argc == 1){
+        SmallShell::getInstance().changePrompt( "smash");
+    }
+    else {
+        SmallShell::getInstance().changePrompt(argv[1]);
+    }
+}
+
+void ShowPidCommand::execute() {
+    std::cout << "smash pid is " << SmallShell::getInstance().getPid() << "\n";
+}
+
+void GetCurrDirCommand::execute() {
+    char *path = new char[PATH_MAX_LENGHT];
+    if (!getcwd(path, PATH_MAX_LENGHT))
+    {
+        perror("smash error: getcwd failed");
+    }
+    std::cout << path << "\n";
+}
+
+void ChangeDirCommand::execute() {
+    if(argc > 2){
+        std::cerr << "smash error: cd: too many arguments" << '\n';
+        return;
+    }
+    char *new_path = new char[PATH_MAX_LENGHT];
+    char *last_path = SmallShell::getInstance().getLastPath();
+    if(!strcmp(argv[1], "-")){
+        if(!SmallShell::getInstance().containsLastPath()){
+            std::cerr << "smash error: cd: OLDPWD not set" << '\n';
+            return;
+        }
+        else{
+            if (!getcwd(new_path, PATH_MAX_LENGHT))
+            {
+                perror("smash error: getcwd failed");
+                return;
+            }
+            else {
+                if(chdir(last_path) < 0){
+                    perror("smash error: chdir failed");
+                    return;
+                }
+            }
+
+        }
+    }
+    else{
+        if (!getcwd(new_path, PATH_MAX_LENGHT))
+        {
+            perror("smash error: getcwd failed");
+            return;
+        }
+        else{
+            if (chdir(argv[1]) < 0)
+            {
+                perror("smash error: chdir failed");
+                return;
+            }
+        }
+    }
+    strncpy_s(last_path, PATH_MAX_LENGHT, new_path, PATH_MAX_LENGHT - 1);
+    delete new_path;
+}
+
+// COMMAND //
+Command::Command(const char *cmd_line){
+    this->cmd_line = cmd_line;
+    argv = new char*[COMMAND_MAX_ARGS];
+    argc = _parseCommandLine(cmd_line, argv);
+}
+Command::~Command(){
+    delete[] argv;
+}
+
+// SMALL SHELL //
 SmallShell::SmallShell() {
-    string& defualt_name = "smash";
-    prompt = defualt_name;
+    prompt = "smash";
+    pid = getpid();
+    hasLastPath = false;
+    last_path = new char[PATH_MAX_LENGHT];
+
 }
 
 SmallShell::~SmallShell() {
@@ -108,7 +190,7 @@ SmallShell::~SmallShell() {
 * Creates and returns a pointer to Command class which matches the given command line (cmd_line)
 */
 Command * SmallShell::CreateCommand(const char* cmd_line) {
-	// For example:
+    // For example:
 /*
   string cmd_s = _trim(string(cmd_line));
   string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
@@ -125,48 +207,44 @@ Command * SmallShell::CreateCommand(const char* cmd_line) {
     return new ExternalCommand(cmd_line);
   }
   */
-  return nullptr;
+    return nullptr;
 }
 
 void SmallShell::executeCommand(const char *cmd_line) {
-  // TODO: Add your implementation here
-  // for example:
-  // Command* cmd = CreateCommand(cmd_line);
-  // cmd->execute();
-  // Please note that you must fork smash process for some commands (e.g., external commands....)
+    // TODO: Add your implementation here
+    // for example:
+    // Command* cmd = CreateCommand(cmd_line);
+    // cmd->execute();
+    // Please note that you must fork smash process for some commands (e.g., external commands....)
 }
 
-// BUILT-IN COMMANDS //
-void ChangePrompt::execute() {
-    if(argc == 1){
-        string& name = "smash";
-        SmallShell::getInstance().changePrompt(name);
-    }
-    else {
-        string& name = argv[1];
-        SmallShell::getInstance().changePrompt(name);
-    }
+string SmallShell::getPrompt(){
+    return prompt;
 }
 
-// COMMAND //
-Command::Command(const char *cmd_line){
-    this->cmd_line = cmd_line;
-    argv = new char*[COMMAND_MAX_ARGS];
-    argc = _parseCommandLine(cmd_line, argv);
-}
-Command::~Command(){
-    delete[] argv;
-}
-
-// SMALL SHELL //
-void SmallShell::changePrompt(std::string& new_prompt){
+void SmallShell::changePrompt(std::string new_prompt){
     prompt = new_prompt;
 }
 
+pid_t SmallShell::getPid(){
+    return pid;
+}
+
+bool SmallShell::containsLastPath(){
+    return hasLastPath;
+}
+
+void SmallShell::TurnTrueLastPath(){
+    hasLastPath = true;
+}
+
+char* SmallShell::getLastPath(){
+    return last_path;
+}
+
 // JOBS LIST //
-JobsList::JobEntry::JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const string& jobName) {
-    this->jobId = jobId;
-    this->jobProcessId = jobProcessId;
+JobsList::JobEntry::JobEntry(const int jobId, const int jobProcessId, Status jobStatus, string jobName)
+: jobId(jobId), jobProcessId(jobProcessId) {
     this->jobStatus = jobStatus;
     this->jobName = jobName;
 }

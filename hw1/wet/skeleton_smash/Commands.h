@@ -10,6 +10,7 @@ using namespace std;
 
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
+#define PATH_MAX_LENGHT (101)
 enum Status {
     Foreground, Background, Stopped
 };
@@ -34,7 +35,7 @@ public:
 
 class BuiltInCommand : public Command {
 public:
-    BuiltInCommand(const char *cmd_line);
+    BuiltInCommand(const char *cmd_line) : Command(cmd_line) {}
 
     virtual ~BuiltInCommand() {}
 };
@@ -80,7 +81,7 @@ public:
 
 class ChangeDirCommand : public BuiltInCommand {
 // TODO: Add your data members public:
-    ChangeDirCommand(const char *cmd_line, char **plastPwd);
+    ChangeDirCommand(const char *cmd_line, char **plastPwd) : BuiltInCommand(cmd_line) {}
 
     virtual ~ChangeDirCommand() {}
 
@@ -89,7 +90,7 @@ class ChangeDirCommand : public BuiltInCommand {
 
 class GetCurrDirCommand : public BuiltInCommand {
 public:
-    GetCurrDirCommand(const char *cmd_line);
+    GetCurrDirCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
 
     virtual ~GetCurrDirCommand() {}
 
@@ -98,7 +99,7 @@ public:
 
 class ShowPidCommand : public BuiltInCommand {
 public:
-    ShowPidCommand(const char *cmd_line);
+    ShowPidCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
 
     virtual ~ShowPidCommand() {}
 
@@ -127,10 +128,10 @@ public:
         const int jobId;
         const int jobProcessId;
         Status jobStatus;
-        const string& jobName;
+        string jobName;
 
     public:
-        JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const string& jobName);
+        JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const string jobName);
         ~JobEntry() = default;
     };
     // TODO: Add your data members
@@ -245,8 +246,11 @@ public:
 class SmallShell {
 private:
     JobsList jobsList;
-    string& prompt;
-    //const int smashID;
+    string prompt;
+    pid_t pid;
+    char *last_path;
+    bool hasLastPath;
+
 
     SmallShell();
 
@@ -267,7 +271,12 @@ public:
     void executeCommand(const char *cmd_line);
     // TODO: add extra methods as needed
 
-    void changePrompt(std::string& s);
+    string getPrompt();
+    void changePrompt(std::string s);
+    pid_t getPid();
+    bool containsLastPath();
+    void TurnTrueLastPath();
+    char* getLastPath();
 };
 
 #endif //SMASH_COMMAND_H_

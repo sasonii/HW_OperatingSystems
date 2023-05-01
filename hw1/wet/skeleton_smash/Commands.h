@@ -130,8 +130,8 @@ public:
         const string& jobName;
 
     public:
-        JobEntry();
-        ~JobsList() = default;
+        JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const string& jobName);
+        ~JobEntry() = default;
     };
     // TODO: Add your data members
 private:

@@ -96,7 +96,7 @@ JobsList::JobEntry * getLastJob(int* lastJobId);
 JobsList::JobEntry *getLastStoppedJob(int *jobId);
 
 SmallShell::SmallShell() {
-    const string& defualt_name = "smash";
+    string& defualt_name = "smash";
     prompt = defualt_name;
 }
 

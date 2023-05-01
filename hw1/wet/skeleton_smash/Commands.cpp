@@ -96,7 +96,8 @@ JobsList::JobEntry * getLastJob(int* lastJobId);
 JobsList::JobEntry *getLastStoppedJob(int *jobId);
 
 SmallShell::SmallShell() {
-    prompt = &std::string("smash");
+    const string& defualt_name = "smash";
+    prompt = defualt_name;
 }
 
 SmallShell::~SmallShell() {
@@ -138,10 +139,12 @@ void SmallShell::executeCommand(const char *cmd_line) {
 // BUILT-IN COMMANDS //
 void ChangePrompt::execute() {
     if(argc == 1){
-        SmallShell::getInstance().changePrompt(&std::string("smash"));
+        string& name = "smash";
+        SmallShell::getInstance().changePrompt(name);
     }
     else {
-        SmallShell::getInstance().changePrompt(&std::string(argv[1]));
+        string& name = argv[1];
+        SmallShell::getInstance().changePrompt(name);
     }
 }
 

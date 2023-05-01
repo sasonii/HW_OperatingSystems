@@ -15,8 +15,12 @@ enum Status {
 };
 
 class Command {
-private:
+protected:
     Status cmdStatus;
+    const char *cmd_line;
+    char **argv;
+    int argc;
+
 public:
     Command(const char *cmd_line);
 
@@ -238,7 +242,7 @@ class SmallShell {
 private:
     JobsList jobsList;
     string prompt;
-    const int smashID;
+    //const int smashID;
 
     SmallShell();
 
@@ -258,6 +262,8 @@ public:
 
     void executeCommand(const char *cmd_line);
     // TODO: add extra methods as needed
+
+    void changePrompt(std::string& s);
 };
 
 #endif //SMASH_COMMAND_H_

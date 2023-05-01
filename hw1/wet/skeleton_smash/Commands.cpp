@@ -81,7 +81,7 @@ void _removeBackgroundSign(char* cmd_line) {
 // TODO: Add your implementation for classes in Commands.h
 
 JobsList::JobsList(){
-    jobsList = List<JobEntry>();
+    jobsList = list<JobEntry>();
 }
 JobsList::~JobsList(){}
 void addJob(Command* cmd, bool isStopped = false){
@@ -90,10 +90,10 @@ void addJob(Command* cmd, bool isStopped = false){
 void printJobsList();
 void killAllJobs();
 void removeFinishedJobs();
-JobEntry * getJobById(int jobId);
+JobsList::JobEntry * getJobById(int jobId);
 void removeJobById(int jobId);
-JobEntry * getLastJob(int* lastJobId);
-JobEntry *getLastStoppedJob(int *jobId);
+JobsList::JobEntry * getLastJob(int* lastJobId);
+JobsList::JobEntry *getLastStoppedJob(int *jobId);
 
 SmallShell::SmallShell() {
 // TODO: add your implementation
@@ -133,4 +133,24 @@ void SmallShell::executeCommand(const char *cmd_line) {
   // Command* cmd = CreateCommand(cmd_line);
   // cmd->execute();
   // Please note that you must fork smash process for some commands (e.g., external commands....)
+}
+
+// BUILT-IN COMMANDS //
+void ChangePrompt::execute() {
+    if(argc <= 1){
+        SmallShell::getInstance().prompt = std::string("smash";
+    }
+    else {
+        SmallShell::getInstance().prompt = std::string("smash";
+    }
+}
+
+// COMMAND //
+Command::Command(const char *cmd_line){
+    this->cmd_line = cmd_line;
+    argv = new char*[COMMAND_MAX_ARGS];
+    argc = _parseCommandLine(cmd_line, argv);
+}
+Command::~Command(){
+    delete[] argv;
 }

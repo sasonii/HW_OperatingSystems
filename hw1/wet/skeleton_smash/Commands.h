@@ -127,7 +127,11 @@ public:
         const int jobId;
         const int jobProcessId;
         Status jobStatus;
-        const char *jobName;
+        const string& jobName;
+
+    public:
+        JobEntry();
+        ~JobsList() = default;
     };
     // TODO: Add your data members
 private:
@@ -241,7 +245,7 @@ public:
 class SmallShell {
 private:
     JobsList jobsList;
-    string prompt;
+    string& prompt;
     //const int smashID;
 
     SmallShell();

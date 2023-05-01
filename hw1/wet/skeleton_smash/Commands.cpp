@@ -156,6 +156,14 @@ Command::~Command(){
 }
 
 // SMALL SHELL //
-SmallShell::changePrompt(std::string& s){
-    prompt = s;
+void SmallShell::changePrompt(std::string& new_prompt){
+    prompt = new_prompt;
+}
+
+// JOBS LIST //
+JobsList::JobEntry::JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const string& jobName;) {
+    this->jobId = jobId;
+    this->jobProcessId = jobProcessId;
+    this->jobStatus = jobStatus;
+    this->jobName = jobName;
 }

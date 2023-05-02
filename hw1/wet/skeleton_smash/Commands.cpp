@@ -7,6 +7,7 @@
 #include <iomanip>
 #include "Commands.h"
 #include <list>
+#include <time.h>
 
 using namespace std;
 
@@ -81,7 +82,7 @@ void _removeBackgroundSign(char* cmd_line) {
 // TODO: Add your implementation for classes in Commands.h
 
 JobsList::JobsList(){
-    jobsList = list<JobEntry>();
+    jobsList = list<JobEntry*>();
 }
 JobsList::~JobsList(){}
 void addJob(Command* cmd, bool isStopped = false){
@@ -137,7 +138,7 @@ void ChangeDirCommand::execute() {
                 return;
             }
             else {
-                if(chdir(last_path) < 0){
+                if(chdir(last_path) != 0){
                     perror("smash error: chdir failed");
                     return;
                 }
@@ -152,15 +153,137 @@ void ChangeDirCommand::execute() {
             return;
         }
         else{
-            if (chdir(argv[1]) < 0)
+            if (chdir(argv[1]) != 0)
             {
                 perror("smash error: chdir failed");
                 return;
             }
         }
     }
-    strncpy_s(last_path, PATH_MAX_LENGHT, new_path, PATH_MAX_LENGHT - 1);
+    strncpy(last_path, new_path, PATH_MAX_LENGHT - 1);
     delete new_path;
+}
+
+void JobsCommand::execute() {
+    SmallShell::getInstance().getJobsList()->printJobsList();
+}
+
+void ForegroundCommand::execute() {
+    if(argc > 2){
+        std::cerr << "smash error: fg: invalid arguments" << std::endl;
+        return;
+    }
+    int job_id;
+    JobsList* jobs = SmallShell::getInstance().getJobsList();
+    if(argc == 1 ){
+        if(!jobs->getNumberOfJobs()){
+            std::cerr << "smash error: fg: jobs list is empty" << std::endl;
+            return;
+        }
+        job_id = jobs->getMaxJobID();
+    }
+    if(argc == 2){
+        try {
+            job_id = stoi(argv[1]);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "smash error: fg: invalid arguments" << std::endl;
+            return;
+        }
+    }
+    JobsList::JobEntry* job = jobs->getJobById(job_id);
+    if(job == nullptr){
+            std::cerr << "smash error: fg: job-id " << job_id << " does not exist" << std::endl;
+    }
+    pid_t job_pid = job->getJobProcessId();
+    std::cout << job->getCmdLine() << " : " << job_pid << std::endl;
+    job->setJobStatus(Status::Foreground);
+    SmallShell::getInstance().setCurrentForegroundJob(job);
+    kill(job_pid, SIGCONT);
+    jobs->removeJobById(job_id);
+    waitpid(job_pid, NULL, WUNTRACED);
+    SmallShell::getInstance().setCurrentForegroundJob(nullptr);
+}
+
+void BackgroundCommand::execute() {
+    if(argc > 2){
+        std::cerr << "smash error: bg: invalid arguments" << std::endl;
+        return;
+    }
+    int job_id;
+    JobsList* jobs = SmallShell::getInstance().getJobsList();
+    if(argc == 1){
+        job_id = jobs->getMaxStoppedJobID();
+        if(job_id == 0){
+            std::cerr << "smash error: bg: there is no stopped jobs to resume" << std::endl;
+            return;
+        }
+    }
+    if(argc == 2){
+        try {
+            job_id = stoi(argv[1]);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "smash error: bg: invalid arguments" << std::endl;
+            return;
+        }
+    }
+    JobsList::JobEntry* job = jobs->getJobById(job_id);
+    if(job == nullptr){
+        std::cerr << "smash error: bg: job-id " << job_id << " does not exist" << std::endl;
+    }
+    if(job->getJobStatus() == Status::Background){
+        std::cerr << "smash error: bg: job-id " << job_id << " is already running in the background" << std::endl;
+    }
+    pid_t job_pid = job->getJobProcessId();
+    std::cout << job->getCmdLine() << " : " << job_pid << std::endl;
+    job->setJobStatus(Status::Background);
+    kill(job_pid, SIGCONT);
+}
+
+void QuitCommand::execute() {
+    if (argc == 1)
+    {
+        kill(SmallShell::getInstance().getPid(),SIGKILL);
+        exit(0);
+    }
+    else if (!strcmp(argv[1], "kill"))
+    {
+        JobsList *jobsList = (SmallShell::getInstance().getJobsList());
+        // NOTE :: implement getNumberOfUnfinishedJobs
+        std::cout << "smash: sending SIGKILL signal to " << jobsList->getNumberOfJobs() << " jobs:" << std::endl;
+        jobsList->killAllJobs();
+        kill(SmallShell::getInstance().getPid(),SIGKILL);
+        exit(0);
+    }
+}
+
+void KillCommand::execute()
+{
+    if (argv[1] == nullptr || argv[2] == nullptr || argv[1][0] != '-' || argv[3] != nullptr)
+    {
+        std::cerr << "smash error: kill: invalid arguments" << std::endl;
+        return;
+    }
+    std::string signal_number_str = std::string(argv[1]);
+    std::string job_id_str = std::string(argv[2]);
+    int signal_number, job_id;
+    try {
+        signal_number = stoi(signal_number_str.substr(1, signal_number_str.size()));
+        job_id = stoi(job_id_str.substr(1, job_id_str.size()));
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "smash error: kill: invalid arguments" << std::endl;
+        return;
+    }
+
+    JobsList::JobEntry *job = SmallShell::getInstance().getJobsList()->getJobById(job_id);
+    if (job == nullptr)
+    {
+        std::cerr << "smash error: kill: job-id " << job_id << " does not exist" << std::endl;
+        return;
+    }
+    if (kill(job->getJobProcessId(), signal_number) == -1)
+        perror("smash error: kill failed");
+    else
+        cout << "signal number " << signal_number << " was sent to pid " << job->getJobProcessId() << std::endl;
 }
 
 // COMMAND //
@@ -175,11 +298,12 @@ Command::~Command(){
 
 // SMALL SHELL //
 SmallShell::SmallShell() {
+    jobsList =  new JobsList();
     prompt = "smash";
     pid = getpid();
     hasLastPath = false;
     last_path = new char[PATH_MAX_LENGHT];
-
+    current_foreground_job = nullptr;
 }
 
 SmallShell::~SmallShell() {
@@ -242,9 +366,78 @@ char* SmallShell::getLastPath(){
     return last_path;
 }
 
+JobsList* SmallShell::getJobsList(){
+    return jobsList;
+}
+
+void SmallShell::setCurrentForegroundJob(JobsList::JobEntry *current_job){
+    this->current_foreground_job = current_job;
+}
+
+// JOBS LIST :: JOB ENTRY //
+JobsList::JobEntry::JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const char *cmd_line)
+: jobId(jobId), jobProcessId(jobProcessId), jobStatus(jobStatus), cmd_line(cmd_line) {
+    entryTime = time(NULL);
+}
+
+JobsList::JobEntry* JobsList::getJobById(int jobId) {
+    for (JobsList::JobEntry* job : jobsList) {
+        if (job->getJobId() == jobId) {
+            return job;
+        }
+    }
+    return nullptr;
+}
+
 // JOBS LIST //
-JobsList::JobEntry::JobEntry(const int jobId, const int jobProcessId, Status jobStatus, string jobName)
-: jobId(jobId), jobProcessId(jobProcessId) {
-    this->jobStatus = jobStatus;
-    this->jobName = jobName;
+void JobsList::printJobsList() {
+    // Sort the jobs list by job ID
+    jobsList.sort();
+
+    // Print each job entry in the sorted list
+    for (const JobsList::JobEntry* job : jobsList) {
+        std::cout << "[" << job->getJobId() << "] " << job->getCmdLine() << " : " << job->getJobProcessId() << difftime(time(NULL), job->getEntryTime()) << "secs";
+        if (job->getJobStatus() == Status::Stopped) {
+            std::cout << " (Stopped)" << std::endl;
+        } else {
+            std::cout << std::endl;
+        }
+    }
+}
+
+int JobsList::getNumberOfJobs(){
+    return jobsList.size();
+}
+
+int JobsList::getMaxJobID() {
+    return maxJobID;
+}
+
+void JobsList::removeJobById(int jobId) {
+    for (auto iter = jobsList.begin(); iter != jobsList.end(); iter++) {
+        if ((*iter)->getJobId() == jobId) {
+            jobsList.erase(iter);
+            if((*iter)->getJobId() == maxJobID){
+                maxJobID--;
+            }
+            return;
+        }
+    }
+}
+
+int JobsList::getMaxStoppedJobID(){
+    int max_job_id = 0;
+    for (auto iter = jobsList.begin(); iter != jobsList.end(); iter++) {
+        if ((*iter)->getJobStatus() == Status::Stopped && (*iter)->getJobId() > max_job_id) {
+            max_job_id = (*iter)->getJobId();
+        }
+    }
+    return max_job_id;
+}
+
+void JobsList::killAllJobs() {
+    for (const JobsList::JobEntry* job : jobsList) {
+        std::cout << job->getJobProcessId() << ": " << job->getCmdLine() << std::endl;
+        kill(job->getJobProcessId(), SIGKILL);
+    }
 }

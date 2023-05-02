@@ -12,7 +12,7 @@ using namespace std;
 #define COMMAND_MAX_ARGS (20)
 #define PATH_MAX_LENGHT (101)
 enum Status {
-    Foreground, Background, Stopped
+    Foreground, Background, Stopped, Finished
 };
 
 class Command {
@@ -109,9 +109,10 @@ public:
 class JobsList;
 
 class QuitCommand : public BuiltInCommand {
-// TODO: Add your data members
+    JobsList *jobs;
+
 public:
-    QuitCommand(const char *cmd_line, JobsList *jobs);
+    QuitCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), jobs(jobs) {}
 
     virtual ~QuitCommand() {}
 
@@ -128,15 +129,43 @@ public:
         const int jobId;
         const int jobProcessId;
         Status jobStatus;
-        string jobName;
+        const char *cmd_line;
+        time_t entryTime;
 
     public:
-        JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const string jobName);
+        JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const char *cmd_line);
         ~JobEntry() = default;
+        bool operator<(const JobEntry& other) const {
+            return jobId < other.jobId;
+        }
+        int getJobId() const {
+            return jobId;
+        }
+
+        int getJobProcessId() const {
+            return jobProcessId;
+        }
+
+        Status getJobStatus() const {
+            return jobStatus;
+        }
+
+        const char* getCmdLine() const {
+            return cmd_line;
+        }
+
+        time_t getEntryTime() const {
+            return entryTime;
+        }
+
+        void setJobStatus(Status jobStatus) {
+            this->jobStatus = jobStatus;
+        }
     };
+
     // TODO: Add your data members
 private:
-    list <JobEntry> jobsList;
+    list <JobEntry*> jobsList;
     int maxJobID;
 
 public:
@@ -159,13 +188,21 @@ public:
     JobEntry *getLastJob(int *lastJobId);
 
     JobEntry *getLastStoppedJob(int *jobId);
+
+    int getNumberOfJobs();
+
+    int getMaxJobID();
+
+    int getMaxStoppedJobID();
     // TODO: Add extra methods or modify exisitng ones as needed
 };
 
 class JobsCommand : public BuiltInCommand {
     // TODO: Add your data members
+private:
+    JobsList *jobs;
 public:
-    JobsCommand(const char *cmd_line, JobsList *jobs);
+    JobsCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), jobs(jobs) {}
 
     virtual ~JobsCommand() {}
 
@@ -173,9 +210,9 @@ public:
 };
 
 class ForegroundCommand : public BuiltInCommand {
-    // TODO: Add your data members
+    JobsList *jobs;
 public:
-    ForegroundCommand(const char *cmd_line, JobsList *jobs);
+    ForegroundCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), jobs(jobs) {}
 
     virtual ~ForegroundCommand() {}
 
@@ -183,9 +220,9 @@ public:
 };
 
 class BackgroundCommand : public BuiltInCommand {
-    // TODO: Add your data members
+    JobsList *jobs;
 public:
-    BackgroundCommand(const char *cmd_line, JobsList *jobs);
+    BackgroundCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), jobs(jobs) {}
 
     virtual ~BackgroundCommand() {}
 
@@ -245,11 +282,12 @@ public:
 
 class SmallShell {
 private:
-    JobsList jobsList;
+    JobsList* jobsList;
     string prompt;
     pid_t pid;
     char *last_path;
     bool hasLastPath;
+    JobsList::JobEntry *current_foreground_job;
 
 
     SmallShell();
@@ -277,6 +315,9 @@ public:
     bool containsLastPath();
     void TurnTrueLastPath();
     char* getLastPath();
+    JobsList* getJobsList();
+    void setCurrentForegroundJob(JobsList::JobEntry *current_job);
+
 };
 
 #endif //SMASH_COMMAND_H_

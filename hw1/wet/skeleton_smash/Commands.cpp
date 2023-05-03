@@ -115,6 +115,7 @@ void GetCurrDirCommand::execute() {
     if (!getcwd(path, PATH_MAX_LENGHT))
     {
         perror("smash error: getcwd failed");
+        return;
     }
     std::cout << path << "\n";
 }
@@ -193,6 +194,7 @@ void ForegroundCommand::execute() {
     JobsList::JobEntry* job = jobs->getJobById(job_id);
     if(job == nullptr){
             std::cerr << "smash error: fg: job-id " << job_id << " does not exist" << std::endl;
+            return;
     }
     pid_t job_pid = job->getJobProcessId();
     std::cout << job->getCmdLine() << " : " << job_pid << std::endl;
@@ -229,9 +231,11 @@ void BackgroundCommand::execute() {
     JobsList::JobEntry* job = jobs->getJobById(job_id);
     if(job == nullptr){
         std::cerr << "smash error: bg: job-id " << job_id << " does not exist" << std::endl;
+        return;
     }
     if(job->getJobStatus() == Status::Background){
         std::cerr << "smash error: bg: job-id " << job_id << " is already running in the background" << std::endl;
+        return;
     }
     pid_t job_pid = job->getJobProcessId();
     std::cout << job->getCmdLine() << " : " << job_pid << std::endl;
@@ -280,15 +284,58 @@ void KillCommand::execute()
         std::cerr << "smash error: kill: job-id " << job_id << " does not exist" << std::endl;
         return;
     }
-    if (kill(job->getJobProcessId(), signal_number) == -1)
+    if (kill(job->getJobProcessId(), signal_number) == -1){ // no need to return because there is no more code, but just in case
         perror("smash error: kill failed");
+        return;
+    }
     else
         cout << "signal number " << signal_number << " was sent to pid " << job->getJobProcessId() << std::endl;
+}
+
+void ExternalCommand::execute() {
+    string cmd_s = _trim(string(cmd_line));
+    bool is_complex = cmd_s.find_first_of("*?") == ((unsigned)-1) ? false : true;
+    string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
+
+    pid_t pid = fork();
+    if(pid == 0){
+        setpgrp();
+        if(is_complex){
+            execl("/bin/bash", "bash", "-c", cmd_line, NULL);
+            // if returned -> error occured
+            perror("smash error: exec failed");
+            return;
+        } else {
+            execv(firstWord.c_str(), (argv + 1)); // TODO: maybe + 2
+            perror("smash error: exec failed");
+            return;
+        }
+    } else if(pid < 0) {
+        perror("smash error: fork failed");
+        return;
+    } else if(is_background_command){
+        SmallShell::getInstance().getJobsList()->addJob(pid, Status::Background, cmd_line);
+    } else {
+        char* cmd_line_copy = new char[COMMAND_ARGS_MAX_LENGTH + 1];
+        strcpy(cmd_line_copy, cmd_line);
+        // NOTE :: check why cmd_line changes over runtimes
+        JobsList::JobEntry* job =  SmallShell::getInstance().getJobsList()->addJob(pid, Status::Foreground, cmd_line_copy);
+        SmallShell::getInstance().setCurrentForegroundJob(job);
+        if (waitpid(pid, NULL, WUNTRACED) < 0)
+        {
+            perror("smash error: wait failed");
+        }
+        return;
+    }
 }
 
 // COMMAND //
 Command::Command(const char *cmd_line){
     this->cmd_line = cmd_line;
+    is_background_command = _isBackgroundComamnd(cmd_line);
+    char *command = new char[COMMAND_ARGS_MAX_LENGTH + 1];
+    strcpy(command, cmd_line);
+    _removeBackgroundSign(command);
     argv = new char*[COMMAND_MAX_ARGS];
     argc = _parseCommandLine(cmd_line, argv);
 }
@@ -314,32 +361,45 @@ SmallShell::~SmallShell() {
 * Creates and returns a pointer to Command class which matches the given command line (cmd_line)
 */
 Command * SmallShell::CreateCommand(const char* cmd_line) {
-    // For example:
-/*
-  string cmd_s = _trim(string(cmd_line));
-  string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
-
-  if (firstWord.compare("pwd") == 0) {
-    return new GetCurrDirCommand(cmd_line);
-  }
-  else if (firstWord.compare("showpid") == 0) {
-    return new ShowPidCommand(cmd_line);
-  }
-  else if ...
-  .....
-  else {
+    string cmd_s = _trim(string(cmd_line));
+    string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
+    if(firstWord.back() == '&'){
+        firstWord = firstWord.substr(0, firstWord.length() - 1);
+    }
+    if (firstWord.compare("chprompt") == 0) {
+        return new ChangePrompt(cmd_line);
+    }
+    if (firstWord.compare("showpid") == 0) {
+        return new ShowPidCommand(cmd_line);
+    }
+    if (firstWord.compare("pwd") == 0) {
+        return new GetCurrDirCommand(cmd_line);
+    }
+    if (firstWord.compare("cd") == 0)    {
+        return new ChangeDirCommand(cmd_line);
+    }
+    if (firstWord.compare("jobs") == 0) {
+        return new JobsCommand(cmd_line, SmallShell::getInstance().getJobsList());
+    }
+    if (firstWord.compare("fg") == 0) {
+        return new ForegroundCommand(cmd_line, SmallShell::getInstance().getJobsList());
+    }
+    if (firstWord.compare("bg") == 0) {
+        return new BackgroundCommand(cmd_line, SmallShell::getInstance().getJobsList());
+    }
+    if (firstWord.compare("quit") == 0) {
+        return new QuitCommand(cmd_line, SmallShell::getInstance().getJobsList());
+    }
+    if (firstWord.compare("kill") == 0) {
+        return new KillCommand(cmd_line, SmallShell::getInstance().getJobsList());
+    }
     return new ExternalCommand(cmd_line);
-  }
-  */
-    return nullptr;
+    //return nullptr;
 }
 
 void SmallShell::executeCommand(const char *cmd_line) {
-    // TODO: Add your implementation here
-    // for example:
-    // Command* cmd = CreateCommand(cmd_line);
-    // cmd->execute();
-    // Please note that you must fork smash process for some commands (e.g., external commands....)
+     Command* cmd = CreateCommand(cmd_line);
+     cmd->execute();
 }
 
 string SmallShell::getPrompt(){
@@ -396,7 +456,7 @@ void JobsList::printJobsList() {
 
     // Print each job entry in the sorted list
     for (const JobsList::JobEntry* job : jobsList) {
-        std::cout << "[" << job->getJobId() << "] " << job->getCmdLine() << " : " << job->getJobProcessId() << difftime(time(NULL), job->getEntryTime()) << "secs";
+        std::cout << "[" << job->getJobId() << "] " << job->getCmdLine() << " : " << job->getJobProcessId() << " " << difftime(time(NULL), job->getEntryTime()) << " secs";
         if (job->getJobStatus() == Status::Stopped) {
             std::cout << " (Stopped)" << std::endl;
         } else {
@@ -440,4 +500,10 @@ void JobsList::killAllJobs() {
         std::cout << job->getJobProcessId() << ": " << job->getCmdLine() << std::endl;
         kill(job->getJobProcessId(), SIGKILL);
     }
+}
+
+JobsList::JobEntry* JobsList::addJob(int jobProcessId, Status jobStatus, const char *cmd_line){
+    JobsList::JobEntry* job = new JobsList::JobEntry(++maxJobID, jobProcessId, jobStatus, cmd_line);
+    jobsList.push_back(job);
+    return job;
 }

@@ -21,6 +21,7 @@ protected:
     const char *cmd_line;
     char **argv;
     int argc;
+    bool is_background_command;
 
 public:
     Command(const char *cmd_line);
@@ -42,7 +43,7 @@ public:
 
 class ExternalCommand : public Command {
 public:
-    ExternalCommand(const char *cmd_line);
+    ExternalCommand(const char *cmd_line) : Command(cmd_line) {}
 
     virtual ~ExternalCommand() {}
 
@@ -80,8 +81,9 @@ public:
 };
 
 class ChangeDirCommand : public BuiltInCommand {
-// TODO: Add your data members public:
-    ChangeDirCommand(const char *cmd_line, char **plastPwd) : BuiltInCommand(cmd_line) {}
+// TODO: Add your data members
+  public:
+    ChangeDirCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
 
     virtual ~ChangeDirCommand() {}
 
@@ -126,14 +128,14 @@ public:
     class JobEntry {
 
     private:
-        const int jobId;
-        const int jobProcessId;
+        int jobId;
+        int jobProcessId;
         Status jobStatus;
         const char *cmd_line;
         time_t entryTime;
 
     public:
-        JobEntry(const int jobId, const int jobProcessId, Status jobStatus, const char *cmd_line);
+        JobEntry(int jobId, int jobProcessId, Status jobStatus, const char *cmd_line);
         ~JobEntry() = default;
         bool operator<(const JobEntry& other) const {
             return jobId < other.jobId;
@@ -174,7 +176,7 @@ public:
     ~JobsList();
 
     void addJob(Command *cmd, bool isStopped = false);
-
+    JobEntry* addJob(int jobProcessId, Status jobStatus, const char *cmd_line);
     void printJobsList();
 
     void killAllJobs();
@@ -271,9 +273,9 @@ public:
 };
 
 class KillCommand : public BuiltInCommand {
-    // TODO: Add your data members
+    JobsList *jobs;
 public:
-    KillCommand(const char *cmd_line, JobsList *jobs);
+    KillCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), jobs(jobs) {}
 
     virtual ~KillCommand() {}
 

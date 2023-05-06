@@ -6,3 +6,6 @@
 /hw1/wet/skeleton_smash/CMakeLists.txt
 /hw1/CMakeLists.txt
 *.o
+cmake-build-debug/
+CMakeLists.txt
+.idea/

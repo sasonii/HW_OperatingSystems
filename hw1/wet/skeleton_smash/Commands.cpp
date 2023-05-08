@@ -351,7 +351,7 @@ void ExternalCommand::execute() {
             perror("smash error: exec failed");
             exit(0);
         } else {
-            execvp(firstWord.c_str(), (argv + 1)); // TODO: maybe + 2
+            execvp(firstWord.c_str(), (argv)); // TODO: maybe + 2
             perror("smash error: exec failed");
             exit(0);
         }
@@ -572,7 +572,7 @@ Command::Command(const char *cmd_line){
     strcpy(command, cmd_line);
     _removeBackgroundSign(command);
     argv = new char*[COMMAND_MAX_ARGS];
-    argc = _parseCommandLine(cmd_line, argv);
+    argc = _parseCommandLine(command, argv);
 }
 Command::~Command(){
     delete[] argv;
@@ -723,7 +723,7 @@ void JobsList::printJobsList() {
     for (const JobsList::JobEntry* job : jobsList) {
         std::cout << "[" << job->getJobId() << "] " << job->getCmdLine() << " : " << job->getJobProcessId() << " " << difftime(time(NULL), job->getEntryTime()) << " secs";
         if (job->getJobStatus() == Status::Stopped) {
-            std::cout << " (Stopped)" << std::endl;
+            std::cout << " (stopped)" << std::endl;
         } else {
             std::cout << std::endl;
         }

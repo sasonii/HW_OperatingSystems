@@ -9,3 +9,4 @@
 cmake-build-debug/
 CMakeLists.txt
 .idea/
+/hw1/wet/skeleton_smash/tests/*

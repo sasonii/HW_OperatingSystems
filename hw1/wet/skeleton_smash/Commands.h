@@ -53,7 +53,7 @@ public:
 class PipeCommand : public Command {
     // TODO: Add your data members
 public:
-    PipeCommand(const char *cmd_line);
+    PipeCommand(const char *cmd_line) : Command(cmd_line) {}
 
     virtual ~PipeCommand() {}
 
@@ -63,7 +63,7 @@ public:
 class RedirectionCommand : public Command {
     // TODO: Add your data members
 public:
-    explicit RedirectionCommand(const char *cmd_line);
+    explicit RedirectionCommand(const char *cmd_line) : Command(cmd_line) {}
 
     virtual ~RedirectionCommand() {}
 
@@ -272,7 +272,7 @@ public:
 class ChmodCommand : public BuiltInCommand {
     // TODO: Add your data members
 public:
-    ChmodCommand(const char *cmd_line);
+    ChmodCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
 
     virtual ~ChmodCommand() {}
 
@@ -282,7 +282,7 @@ public:
 class GetFileTypeCommand : public BuiltInCommand {
     // TODO: Add your data members
 public:
-    GetFileTypeCommand(const char *cmd_line);
+    GetFileTypeCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
 
     virtual ~GetFileTypeCommand() {}
 
@@ -292,7 +292,7 @@ public:
 class SetcoreCommand : public BuiltInCommand {
     // TODO: Add your data members
 public:
-    SetcoreCommand(const char *cmd_line);
+    SetcoreCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
 
     virtual ~SetcoreCommand() {}
 

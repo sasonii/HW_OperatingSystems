@@ -8,6 +8,9 @@
 #include "Commands.h"
 #include <list>
 #include <time.h>
+#include <fcntl.h>
+#include <sys/sysinfo.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -346,11 +349,11 @@ void ExternalCommand::execute() {
             execl("/bin/bash", "bash", "-c", cmd_line, NULL);
             // if returned -> error occured
             perror("smash error: exec failed");
-            return;
+            exit(0);
         } else {
-            execv(firstWord.c_str(), (argv + 1)); // TODO: maybe + 2
+            execvp(firstWord.c_str(), (argv + 1)); // TODO: maybe + 2
             perror("smash error: exec failed");
-            return;
+            exit(0);
         }
     } else if(pid < 0) {
         perror("smash error: fork failed");
@@ -369,6 +372,194 @@ void ExternalCommand::execute() {
         {
             perror("smash error: wait failed");
         }
+        SmallShell::getInstance().setCurrentForegroundJob(nullptr);
+    }
+}
+
+void PipeCommand::execute() {
+    string cmd_s = _trim(string(cmd_line));
+    int first_occurance = cmd_s.find_first_of("|");
+    string first_command = cmd_s.substr(0, first_occurance);
+    bool is_error_pipe = cmd_s.at(first_occurance + 1) == '&';
+    string second_command = _trim(cmd_s.substr(first_occurance + 1 + (int)is_error_pipe, cmd_s.size()));
+    int fd[2];
+    if (pipe(fd) < 0)
+    {
+        perror("smash error: pipe failed");
+    }
+    pid_t pid_1 = fork();
+    if (pid_1 == 0) {
+        // first child
+        if(is_error_pipe){
+            dup2(fd[1],2);
+        } else {
+            dup2(fd[1],1);
+        }
+        close(fd[0]);
+        close(fd[1]);
+        SmallShell::getInstance().executeCommand(first_command.c_str());
+        exit(0);
+
+    } else if(pid_1 < 0) {
+        perror("smash error: fork failed");
+        return;
+    }
+
+    pid_t pid_2 = fork();
+    if (pid_2 == 0) {
+        // second child
+        dup2(fd[0],0);
+        close(fd[0]);
+        close(fd[1]);
+        SmallShell::getInstance().executeCommand(second_command.c_str());
+        exit(0);
+    } else if(pid_2 < 0) {
+        perror("smash error: fork failed");
+        return;
+    }
+    close(fd[0]);
+    close(fd[1]);
+    char* cmd_line_copy = new char[COMMAND_ARGS_MAX_LENGTH + 1];
+    strcpy(cmd_line_copy, cmd_line);
+    // NOTE :: check why cmd_line changes over runtimes
+    JobsList::JobEntry* job =  SmallShell::getInstance().getJobsList()->addJob(pid_2, Status::Foreground, cmd_line_copy);
+    SmallShell::getInstance().setCurrentForegroundJob(job);
+    if (waitpid(pid_2, NULL, WUNTRACED) < 0)
+    {
+        perror("smash error: wait failed");
+    }
+    SmallShell::getInstance().setCurrentForegroundJob(nullptr);
+}
+
+void RedirectionCommand::execute() {
+    string cmd_s = _trim(string(cmd_line));
+    int first_occurance = cmd_s.find_first_of(">");
+    string command_to_exe = cmd_s.substr(0, first_occurance);
+    bool is_append = cmd_s.at(first_occurance + 1) == '>';
+    string file_to_write = _trim(cmd_s.substr(first_occurance + 1 + (int)is_append, cmd_s.size()));
+
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        // child
+        close(1); //close stdout
+        if(is_append){
+            open(file_to_write.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0644);
+        }
+        else{
+            open(file_to_write.c_str(), O_WRONLY | O_CREAT, 0644);
+        }
+        SmallShell::getInstance().executeCommand(command_to_exe.c_str()); //executing the command that was supplied the pipe
+        exit(0);
+    }else if (pid > 0){
+        // father
+        char* cmd_line_copy = new char[COMMAND_ARGS_MAX_LENGTH + 1];
+        strcpy(cmd_line_copy, cmd_line);
+        JobsList::JobEntry* job =  SmallShell::getInstance().getJobsList()->addJob(pid, Status::Foreground, cmd_line_copy);
+        SmallShell::getInstance().setCurrentForegroundJob(job);
+        waitpid(pid, nullptr, WUNTRACED);
+        SmallShell::getInstance().setCurrentForegroundJob(nullptr);
+
+
+    } else {
+        perror("smash error: fork failed");
+        return;
+    }
+}
+
+void SetcoreCommand::execute() {
+    if(argc != 3){
+        std::cerr << "smash error: setcore: invalid arguments" << std::endl;
+        return;
+    }
+    int job_id, core_num;
+    JobsList* jobs = SmallShell::getInstance().getJobsList();
+
+    try {
+        job_id = stoi(argv[1]);
+        core_num = stoi(argv[2]);
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "smash error: setcore: invalid arguments" << std::endl;
+        return;
+    }
+    if((core_num >= get_nprocs()) | (core_num < 0)){
+        std::cerr << "smash error: setcore: invalid core number" << std::endl;
+        return;
+    }
+
+    JobsList::JobEntry* job = jobs->getJobById(job_id);
+    if(job == nullptr){
+        std::cerr << "smash error: setcore: job-id " << job_id << " does not exist" << std::endl;
+        return;
+    }
+
+    cpu_set_t cpuset;
+
+    // Clear the CPU set and set CPU 0
+    CPU_ZERO(&cpuset);
+    CPU_SET(core_num, &cpuset);
+    // Set the process affinity to CPU 0
+    if (sched_setaffinity(job->getJobProcessId(), sizeof(cpu_set_t), &cpuset) == -1) {
+        perror("smash error: sched_setaffinity failed");
+        return;
+    }
+}
+
+void GetFileTypeCommand::execute() {
+    if(argc != 2){
+        std::cerr << "smash error: getfiletype: invalid arguments" << std::endl;
+        return;
+    }
+    string cmd_s = _trim(string(cmd_line));
+    string second_word = _trim(cmd_s.substr(cmd_s.find_first_of(" ") + 1, cmd_s.size()));
+
+    struct stat s;
+    if (lstat(second_word.c_str(), &s) == -1) {
+        perror("smash error: lstat failed");
+        return;
+    }
+
+    if (S_ISREG(s.st_mode)) {
+        std::cout << second_word << "'s type is \"regular file\" and takes up " << s.st_size << " bytes" << std::endl;
+    } else if (S_ISDIR(s.st_mode)) {
+        std::cout << second_word << "'s type is \"directory\" and takes up " << s.st_size << " bytes" << std::endl;
+    } else if (S_ISCHR(s.st_mode)) {
+        std::cout << second_word << "'s type is \"character device\" and takes up " << s.st_size << " bytes" << std::endl;
+    } else if (S_ISBLK(s.st_mode)) {
+        std::cout << second_word << "'s type is \"block device\" and takes up " << s.st_size << " bytes" << std::endl;
+    } else if (S_ISFIFO(s.st_mode)) {
+        std::cout << second_word << "'s type is \"FIFO\" and takes up " << s.st_size << " bytes" << std::endl;
+    } else if (S_ISLNK(s.st_mode)) {
+        std::cout << second_word << "'s type is \"symbolic link\" and takes up " << s.st_size << " bytes" << std::endl;
+    } else if (S_ISSOCK(s.st_mode)) {
+        std::cout << second_word << "'s type is \"דocket\" and takes up " << s.st_size << " bytes" << std::endl;
+    }
+//    else {
+//        std::cout << "Unknown file type\n";
+//    }
+}
+
+void ChmodCommand::execute() {
+    if(argc != 3){
+        std::cerr << "smash error: chmod: invalid arguments" << std::endl;
+        return;
+    }
+
+    string cmd_s = _trim(string(cmd_line));
+    string second_word = _trim(cmd_s.substr(cmd_s.find_first_of(" ") + 1, cmd_s.size()));
+
+    int new_mode = std::stoi(argv[1], nullptr, 8);
+    const char* path_to_file = argv[2];
+
+    try {
+        new_mode = std::stoi(argv[1], nullptr, 8);
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "smash error: chmod: invalid arguments" << std::endl;
+        return;
+    }
+
+    if (chmod(path_to_file, new_mode) == -1) {
+        perror("smash error: chmod failed");
         return;
     }
 }
@@ -407,6 +598,25 @@ SmallShell::~SmallShell() {
 Command * SmallShell::CreateCommand(const char* cmd_line) {
     string cmd_s = _trim(string(cmd_line));
     string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
+    if(firstWord.back() == '&'){
+        firstWord = firstWord.substr(0, firstWord.length() - 1);
+    }
+    if (cmd_s.find_first_of("|") != static_cast<std::string::size_type>(-1))
+    {
+        return new PipeCommand(cmd_line);
+    }
+    if (cmd_s.find_first_of(">") != static_cast<std::string::size_type>(-1))
+    {
+        return new RedirectionCommand(cmd_line);
+    }
+    if (firstWord.compare("setcore") == 0) {
+        return new SetcoreCommand(cmd_line);
+    }
+    if (firstWord.compare("getfiletype") == 0) {
+        return new GetFileTypeCommand(cmd_line);
+    }if (firstWord.compare("chmod") == 0) {
+        return new ChmodCommand(cmd_line);
+    }
     if(cmd_s == "^Z"){
         return new CTRLZCommand(cmd_line);
     }
@@ -417,9 +627,6 @@ Command * SmallShell::CreateCommand(const char* cmd_line) {
         return new EmptyCommand(cmd_line);
     }
 
-    if(firstWord.back() == '&'){
-        firstWord = firstWord.substr(0, firstWord.length() - 1);
-    }
     if (firstWord.compare("chprompt") == 0) {
         return new ChangePrompt(cmd_line);
     }

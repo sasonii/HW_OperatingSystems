@@ -108,6 +108,32 @@ public:
     void execute() override;
 };
 
+// NOTE : delete those 3
+class EmptyCommand : public BuiltInCommand {
+public:
+    EmptyCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+
+    virtual ~EmptyCommand() {}
+
+    void execute() override;
+};
+
+class CTRLZCommand : public BuiltInCommand {
+public:
+    CTRLZCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+
+    virtual ~CTRLZCommand() {}
+
+    void execute() override;
+};
+class CTRLCCommand : public BuiltInCommand {
+public:
+    CTRLCCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+
+    virtual ~CTRLCCommand() {}
+
+    void execute() override;
+};
 class JobsList;
 
 class QuitCommand : public BuiltInCommand {
@@ -177,6 +203,7 @@ public:
 
     void addJob(Command *cmd, bool isStopped = false);
     JobEntry* addJob(int jobProcessId, Status jobStatus, const char *cmd_line);
+    JobEntry* addJob(JobEntry* job);
     void printJobsList();
 
     void killAllJobs();
@@ -318,6 +345,7 @@ public:
     void TurnTrueLastPath();
     char* getLastPath();
     JobsList* getJobsList();
+    JobsList::JobEntry* getCurrentForegroundJob();
     void setCurrentForegroundJob(JobsList::JobEntry *current_job);
 
 };

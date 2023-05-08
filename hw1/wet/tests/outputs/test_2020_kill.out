@@ -1,0 +1,67 @@
+smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> smash> [1] jobs : 34284 2secs
+smash> smash> smash> [1] jobs : 34284 3secs
+[2] jobs : 34363 1secs
+smash> smash> [1] jobs : 34284 3secs
+[2] jobs : 34363 1secs
+[3] jobs : 34405 0secs
+smash> smash> [1] jobs 5 : 34284 5secs
+[2] jobs 5 : 34363 3secs
+[3] jobs 5 : 34405 2secs
+[4] jobs 5 : 34406 2secs
+smash> smash> smash> [1] jobs : 34284 14secs
+[2] jobs : 34363 12secs
+[3] jobs : 34405 11secs
+[4] jobs : 34406 11secs
+smash> smash> [1] jobs : 34284 17secs
+[2] jobs : 34363 15secs
+[3] jobs : 34405 14secs
+[4] jobs : 34406 14secs
+[5] jobs : 34793 3secs
+smash> smash> [1]  : 34284 18secs
+[2]  : 34363 16secs
+[3]  : 34405 15secs
+[4]  : 34406 15secs
+[5]  : 34793 4secs
+smash> smash> smash> smash> [1] jobs : 34284 35secs
+[2] jobs : 34363 33secs
+[3] jobs : 34405 32secs
+[4] jobs : 34406 32secs
+[5] jobs : 34793 21secs
+[6] jobs : 34951 17secs
+[7] x¨×%V : 34953 16secs
+[8] sleep 15 : 34955 15secs
+smash> smash> [1] jobs : 34284 36secs
+[2] jobs : 34363 34secs
+[3] jobs : 34405 33secs
+[4] jobs : 34406 33secs
+[5] jobs : 34793 22secs
+[6] jobs : 34951 18secs
+[7] x¨×%V : 34953 17secs
+[8] sleep 15 : 34955 16secs
+smash> smash> [1] jobs : 34284 37secs
+[2] jobs : 34363 35secs
+[3] jobs : 34405 34secs
+[4] jobs : 34406 34secs
+[5] jobs : 34793 23secs
+[6] jobs : 34951 19secs
+[7] x¨×%V : 34953 18secs
+[8] sleep 15 : 34955 17secs
+smash> smash> [1] jobs : 34284 38secs
+[2] jobs : 34363 36secs
+[3] jobs : 34405 35secs
+[4] jobs : 34406 35secs
+[5] jobs : 34793 24secs
+[6] jobs : 34951 20secs
+[7] x¨×%V : 34953 19secs
+[8] sleep 15 : 34955 18secs
+smash> smash> smash> smash> smash: sending SIGKILL signal to 10 jobs:
+34284: quit kill
+34363: quit kill
+34405: quit kill
+34406: quit kill
+34793: quit kill
+34951: quit kill
+34953: x¨×%V
+34955: sleep 15
+34956: quit kill
+34957: sleep 10

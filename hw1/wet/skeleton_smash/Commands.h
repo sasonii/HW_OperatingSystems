@@ -213,6 +213,7 @@ public:
     JobEntry *getJobById(int jobId);
 
     void removeJobById(int jobId);
+    void removeJobByPid(pid_t pid);
 
     JobEntry *getLastJob(int *lastJobId);
 

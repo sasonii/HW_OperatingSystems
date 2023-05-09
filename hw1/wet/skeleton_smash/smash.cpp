@@ -20,6 +20,9 @@ int main(int argc, char* argv[]) {
         std::cout << smash.getPrompt() << "> ";
         std::string cmd_line;
         std::getline(std::cin, cmd_line);
+        if(cmd_line == ""){
+            continue;
+        }
         smash.executeCommand(cmd_line.c_str());
     }
     return 0;

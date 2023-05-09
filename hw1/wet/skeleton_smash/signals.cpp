@@ -16,8 +16,15 @@ void ctrlZHandler(int sig_num) {
     if(kill(job_pid,SIGSTOP) < 0){
         perror("smash error: kill failed");
     }
-    (SmallShell::getInstance().getJobsList())->addJob(job);
-    std::cout << "smash: process " << job_pid << " was stopped" << std::endl;
+    if(job->getJobId() == -1){
+        //from external without &
+        JobsList::JobEntry* real_job =  SmallShell::getInstance().getJobsList()->addJob(job->getJobProcessId(), Status::Stopped, job->getCmdLine());
+        (SmallShell::getInstance().getJobsList())->addJob(real_job);
+    }
+    else{
+        (SmallShell::getInstance().getJobsList())->addJob(job);
+    }
+    std::cout<<"smash: process "<< job_pid << " was stopped" << std::endl;
 }
 void ctrlCHandler(int sig_num) {
     std::cout << "smash: got ctrl-C" << std::endl;

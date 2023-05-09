@@ -466,13 +466,13 @@ void RedirectionCommand::execute() {
         // child
         close(1); //close stdout
         if(is_append){
-            if(open(file_to_write.c_str(), O_WRONLY | O_CREAT | O_APPEND , 0644) == -1){
+            if(open(file_to_write.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0655) == -1){
                 perror("smash error: open failed");
                 exit(0);
             }
         }
         else{
-            if(open(file_to_write.c_str(), O_WRONLY | O_CREAT | O_TRUNC , 0644) == -1) {
+            if(open(file_to_write.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0655) == -1) {
                 perror("smash error: open failed");
                 exit(0);
             }

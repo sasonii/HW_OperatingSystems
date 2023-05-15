@@ -102,45 +102,45 @@ JobsList::JobEntry * getLastJob(int* lastJobId);
 JobsList::JobEntry *getLastStoppedJob(int *jobId);
 
 // BUILT-IN COMMANDS //
-
-// NOTE : delete those 3
-void EmptyCommand::execute() {
-
-}
-void CTRLZCommand::execute() {
-    std::cout << "smash: got ctrl-Z" << std::endl;
-    JobsList::JobEntry* job = SmallShell::getInstance().getCurrentForegroundJob();
-    if(job == nullptr){
-        return;
-    }
-    job->setJobStatus(Status::Stopped);
-    pid_t job_pid = job->getJobProcessId();
-    if(kill(job_pid,SIGSTOP) < 0){
-        perror("smash error: kill failed");
-    }
-    if(job->getJobId() == -1){
-        //from external without &
-        JobsList::JobEntry* real_job =  SmallShell::getInstance().getJobsList()->addJob(job->getJobProcessId(), Status::Stopped, job->getCmdLine());
-        (SmallShell::getInstance().getJobsList())->addJob(real_job);
-    }
-    else{
-        (SmallShell::getInstance().getJobsList())->addJob(job);
-    }
-    std::cout<<"smash: process "<< job_pid << " was stopped" << std::endl;
-}
-void CTRLCCommand::execute() {
-    std::cout<<"smash: got ctrl-C\n";
-    JobsList::JobEntry* job = SmallShell::getInstance().getCurrentForegroundJob();
-    if(job==nullptr){
-        return;
-    }
-    job->setJobStatus(Status::Finished);
-
-    if(kill(job->getJobProcessId(),SIGKILL) < 0){
-        perror("smash error: kill failed");
-    }
-    std::cout<<"smash: process "<< job->getJobProcessId() << " was killed" << std::endl;
-}
+//
+//// NOTE : delete those 3
+//void EmptyCommand::execute() {
+//
+//}
+//void CTRLZCommand::execute() {
+//    std::cout << "smash: got ctrl-Z" << std::endl;
+//    JobsList::JobEntry* job = SmallShell::getInstance().getCurrentForegroundJob();
+//    if(job == nullptr){
+//        return;
+//    }
+//    job->setJobStatus(Status::Stopped);
+//    pid_t job_pid = job->getJobProcessId();
+//    if(kill(job_pid,SIGSTOP) < 0){
+//        perror("smash error: kill failed");
+//    }
+//    if(job->getJobId() == -1){
+//        //from external without &
+//        JobsList::JobEntry* real_job =  SmallShell::getInstance().getJobsList()->addJob(job->getJobProcessId(), Status::Stopped, job->getCmdLine());
+//        (SmallShell::getInstance().getJobsList())->addJob(real_job);
+//    }
+//    else{
+//        (SmallShell::getInstance().getJobsList())->addJob(job);
+//    }
+//    std::cout<<"smash: process "<< job_pid << " was stopped" << std::endl;
+//}
+//void CTRLCCommand::execute() {
+//    std::cout<<"smash: got ctrl-C\n";
+//    JobsList::JobEntry* job = SmallShell::getInstance().getCurrentForegroundJob();
+//    if(job==nullptr){
+//        return;
+//    }
+//    job->setJobStatus(Status::Finished);
+//
+//    if(kill(job->getJobProcessId(),SIGKILL) < 0){
+//        perror("smash error: kill failed");
+//    }
+//    std::cout<<"smash: process "<< job->getJobProcessId() << " was killed" << std::endl;
+//}
 
 void ChangePrompt::execute() {
     if(argc == 1){
@@ -303,7 +303,7 @@ void QuitCommand::execute() {
         // NOTE :: implement getNumberOfUnfinishedJobs
         std::cout << "smash: sending SIGKILL signal to " << jobsList->getNumberOfJobs() << " jobs:" << std::endl;
         jobsList->killAllJobs();
-        kill(SmallShell::getInstance().getPid(),SIGKILL);
+//        kill(SmallShell::getInstance().getPid(),SIGKILL);
         exit(0);
     }
 }
@@ -658,15 +658,15 @@ Command * SmallShell::CreateCommand(const char* cmd_line) {
     }if (firstWord.compare("chmod") == 0) {
         return new ChmodCommand(cmd_line);
     }
-    if(cmd_s == "^Z"){
-        return new CTRLZCommand(cmd_line);
-    }
-    if(cmd_s == "^C"){
-        return new CTRLCCommand(cmd_line);
-    }
-    if(cmd_s[0] == '^'){
-        return new EmptyCommand(cmd_line);
-    }
+//    if(cmd_s == "^Z"){
+//        return new CTRLZCommand(cmd_line);
+//    }
+//    if(cmd_s == "^C"){
+//        return new CTRLCCommand(cmd_line);
+//    }
+//    if(cmd_s[0] == '^'){
+//        return new EmptyCommand(cmd_line);
+//    }
 
     if (firstWord.compare("chprompt") == 0) {
         return new ChangePrompt(cmd_line);

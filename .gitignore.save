@@ -1,0 +1,17 @@
+
+/hw1/cmake-build-debug/
+/hw1/wet/skeleton_smash/cmake-build-debug/
+/hw1/wet/skeleton_smash/CMakeLists.txt
+/hw1/.idea
+/hw1/wet/skeleton_smash/.idea
+/hw1/wet/skeleton_smash/CMakeLists.txt
+/hw1/CMakeLists.txt
+*.o
+cmake-build-debug/
+CMakeLists.txt
+.idea/
+/hw1/wet/skeleton_smash/tests/*
+/hw1/wet/skeleton_smash/ctf
+/
+hw1/wet/skeleton_smash/
+

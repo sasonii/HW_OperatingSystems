@@ -108,32 +108,32 @@ public:
     void execute() override;
 };
 
-// NOTE : delete those 3
-class EmptyCommand : public BuiltInCommand {
-public:
-    EmptyCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
-
-    virtual ~EmptyCommand() {}
-
-    void execute() override;
-};
-
-class CTRLZCommand : public BuiltInCommand {
-public:
-    CTRLZCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
-
-    virtual ~CTRLZCommand() {}
-
-    void execute() override;
-};
-class CTRLCCommand : public BuiltInCommand {
-public:
-    CTRLCCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
-
-    virtual ~CTRLCCommand() {}
-
-    void execute() override;
-};
+//// NOTE : delete those 3
+//class EmptyCommand : public BuiltInCommand {
+//public:
+//    EmptyCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+//
+//    virtual ~EmptyCommand() {}
+//
+//    void execute() override;
+//};
+//
+//class CTRLZCommand : public BuiltInCommand {
+//public:
+//    CTRLZCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+//
+//    virtual ~CTRLZCommand() {}
+//
+//    void execute() override;
+//};
+//class CTRLCCommand : public BuiltInCommand {
+//public:
+//    CTRLCCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+//
+//    virtual ~CTRLCCommand() {}
+//
+//    void execute() override;
+//};
 class JobsList;
 
 class QuitCommand : public BuiltInCommand {

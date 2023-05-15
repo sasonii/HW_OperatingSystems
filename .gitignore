@@ -10,3 +10,11 @@ cmake-build-debug/
 CMakeLists.txt
 .idea/
 /hw1/wet/skeleton_smash/tests/*
+/hw1/wet/skeleton_smash/
+/hw1/wet/skeleton_smash/ctf
+/hw1/wet/skeleton_smash/ctf.cpp
+/hw1/wet/skeleton_smash/err.txt
+/hw1/wet/skeleton_smash/out.txt
+/hw1/wet/skeleton_smash/in.txt
+/hw1/wet/skeleton_smash/infinite_loop
+/hw1/wet/README.txt

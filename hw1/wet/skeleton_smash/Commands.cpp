@@ -595,7 +595,10 @@ void ChmodCommand::execute() {
         std::cerr << "smash error: chmod: invalid arguments" << std::endl;
         return;
     }
-
+    if (new_mode < 0 || new_mode > 0777) {
+        std::cerr << "smash error: chmod: invalid arguments" << std::endl;
+        return;
+    }
     if (chmod(path_to_file, new_mode) == -1) {
         perror("smash error: chmod failed");
         return;

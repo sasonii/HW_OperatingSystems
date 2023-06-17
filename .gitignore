@@ -18,3 +18,10 @@ CMakeLists.txt
 /hw1/wet/skeleton_smash/in.txt
 /hw1/wet/skeleton_smash/infinite_loop
 /hw1/wet/README.txt
+
+/hw3/wet/*.o
+/hw3/wet/.idea/
+/hw3/wet/client
+/hw3/wet/server
+/hw3/wet/public/
+/hw3/wet/output.cgi

@@ -7,7 +7,7 @@
 #define WET_QUEUE_H
 // Node structure
 typedef struct Node {
-    void* data;
+    int data;
     double arrival_time;
     struct Node* next;
 } Node;
@@ -22,7 +22,8 @@ typedef struct Queue {
 // Function prototypes
 Queue* createQueue();
 int isEmpty(Queue* queue);
-void enqueue(Queue* queue, void* data);
-void* dequeue(Queue* queue, double* arrival_time, double* dispatch_time);
+void enqueue(Queue* queue, int data);
+int dequeue(Queue* queue, double* arrival_time, double* dispatch_time);
+void dequeue_i(Queue* queue, int i);
 
 #endif //WET_QUEUE_H

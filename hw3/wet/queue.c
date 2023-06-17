@@ -23,7 +23,7 @@ int isEmpty(Queue* queue) {
 }
 
 // Insert an element into the queue
-void enqueue(Queue* queue, void* data) {
+void enqueue(Queue* queue, int data) {
     Node* new_node = (Node*)malloc(sizeof(Node));
     new_node->data = data;
     new_node->next = NULL;
@@ -39,9 +39,9 @@ void enqueue(Queue* queue, void* data) {
 }
 
 // Remove an element from the queue
-void* dequeue(Queue* queue, double* arrival_time, double* dispatch_time) {
+int dequeue(Queue* queue, double* arrival_time, double* dispatch_time) {
     if (isEmpty(queue)) {
-        return NULL;
+        return -1;
     }
 
     Node* temp = queue->front;
@@ -50,12 +50,40 @@ void* dequeue(Queue* queue, double* arrival_time, double* dispatch_time) {
     if (queue->front == NULL) {
         queue->rear = NULL;
     }
+    if(arrival_time != NULL){
+        *arrival_time = temp->arrival_time;
+    }
+    if(dispatch_time != NULL) {
+        *dispatch_time = temp->arrival_time - Time_GetSeconds();
+    }
 
-    *arrival_time = temp->arrival_time;
-    *dispatch_time = temp->arrival_time - Time_GetSeconds();
-
-    void* result = temp->data;
+    int result = temp->data;
     free(temp);
     queue->queue_size--;
     return result;
+}
+
+void dequeue_i(Queue* queue, int i){
+    if(i > queue->queue_size){
+        return;
+    }
+    if((queue->queue_size == 1) & (i == 1)){
+        queue->front = queue->rear = NULL;
+        queue->queue_size = 0;
+        return;
+    }
+    int curr = 1;
+    Node* temp = queue->front;
+    while(curr != i-1){
+        temp = temp->next;
+    }
+    Node* node_to_delete = temp->next;
+    temp->next = node_to_delete->next;
+
+    if(i == queue->queue_size){
+        queue->rear = temp;
+    }
+
+    free(node_to_delete);
+    queue->queue_size--;
 }

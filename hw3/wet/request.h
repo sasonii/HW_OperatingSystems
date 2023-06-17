@@ -7,6 +7,6 @@ typedef struct {
     int handler_thread_dynamic_req_count;
 } stats_t;
 
-void requestHandle(int fd, stats_t* stats, double arrival_time, double dispatch_interval);
+void requestHandle(int fd, stats_t* stats, double* arrival_time, double* dispatch_interval);
 
 #endif

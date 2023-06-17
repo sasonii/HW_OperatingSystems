@@ -6,7 +6,7 @@
 #include "request.h"
 
 // requestError(      fd,    filename,        "404",    "Not found", "OS-HW3 Server could not find this file");
-void requestError(int fd, char *cause, char *errnum, char *shortmsg, char *longmsg, stats_t* stats, double arrival_time, double dispatch_interval)
+void requestError(int fd, char *cause, char *errnum, char *shortmsg, char *longmsg, stats_t* stats, double* arrival_time, double* dispatch_interval)
 {
    char buf[MAXLINE], body[MAXBUF];
 
@@ -30,10 +30,10 @@ void requestError(int fd, char *cause, char *errnum, char *shortmsg, char *longm
    Rio_writen(fd, buf, strlen(buf));
    printf("%s", buf);
 
-    sprintf(buf, "Stat-Req-Arrival:: %.6f\r\n", arrival_time);
+    sprintf(buf, "Stat-Req-Arrival:: %.6f\r\n", *arrival_time);
     Rio_writen(fd, buf, strlen(buf));
     printf("%s", buf);
-    sprintf(buf, "Stat-Req-Dispatch:: %.6f\r\n", dispatch_interval);
+    sprintf(buf, "Stat-Req-Dispatch:: %.6f\r\n", *dispatch_interval);
     Rio_writen(fd, buf, strlen(buf));
     printf("%s", buf);
     sprintf(buf, "Stat-Thread-Id:: %d\r\n", stats->handler_thread_id);
@@ -120,7 +120,7 @@ void requestGetFiletype(char *filename, char *filetype)
       strcpy(filetype, "text/plain");
 }
 
-void requestServeDynamic(int fd, char *filename, char *cgiargs, stats_t* stats, double arrival_time, double dispatch_interval)
+void requestServeDynamic(int fd, char *filename, char *cgiargs, stats_t* stats, double* arrival_time, double* dispatch_interval)
 {
    char buf[MAXLINE], *emptylist[] = {NULL};
 
@@ -128,8 +128,8 @@ void requestServeDynamic(int fd, char *filename, char *cgiargs, stats_t* stats, 
    // The CGI script has to finish writing out the header.
    sprintf(buf, "HTTP/1.0 200 OK\r\n");
    sprintf(buf, "%sServer: OS-HW3 Web Server\r\n", buf);
-    sprintf(buf, "%sStat-Req-Arrival:: %.6f\r\n", buf, arrival_time);
-    sprintf(buf, "%sStat-Req-Dispatch:: %.6f\r\n", buf, dispatch_interval);
+    sprintf(buf, "%sStat-Req-Arrival:: %.6f\r\n", buf, *arrival_time);
+    sprintf(buf, "%sStat-Req-Dispatch:: %.6f\r\n", buf, *dispatch_interval);
     sprintf(buf, "%sStat-Thread-Id:: %d\r\n", buf, stats->handler_thread_id);
     sprintf(buf, "%sStat-Thread -Count:: %d\r\n", buf, stats->handler_thread_req_count);
     sprintf(buf, "%sStat-Thread-Static:: %d\r\n", buf, stats->handler_thread_static_req_count);
@@ -148,7 +148,7 @@ void requestServeDynamic(int fd, char *filename, char *cgiargs, stats_t* stats, 
 }
 
 
-void requestServeStatic(int fd, char *filename, int filesize, stats_t* stats, double arrival_time, double dispatch_interval)
+void requestServeStatic(int fd, char *filename, int filesize, stats_t* stats, double* arrival_time, double* dispatch_interval)
 {
    int srcfd;
    char *srcp, filetype[MAXLINE], buf[MAXBUF];
@@ -167,8 +167,8 @@ void requestServeStatic(int fd, char *filename, int filesize, stats_t* stats, do
    sprintf(buf, "%sServer: OS-HW3 Web Server\r\n", buf);
    sprintf(buf, "%sContent-Length: %d\r\n", buf, filesize);
    sprintf(buf, "%sContent-Type: %s\r\n", buf, filetype);
-    sprintf(buf, "%sStat-Req-Arrival:: %.6f\r\n", buf, arrival_time);
-    sprintf(buf, "%sStat-Req-Dispatch:: %.6f\r\n", buf, dispatch_interval);
+    sprintf(buf, "%sStat-Req-Arrival:: %.6f\r\n", buf, *arrival_time);
+    sprintf(buf, "%sStat-Req-Dispatch:: %.6f\r\n", buf, *dispatch_interval);
     sprintf(buf, "%sStat-Thread-Id:: %d\r\n", buf, stats->handler_thread_id);
     sprintf(buf, "%sStat-Thread -Count:: %d\r\n", buf, stats->handler_thread_req_count);
     sprintf(buf, "%sStat-Thread-Static:: %d\r\n", buf, stats->handler_thread_static_req_count);
@@ -183,7 +183,7 @@ void requestServeStatic(int fd, char *filename, int filesize, stats_t* stats, do
 }
 
 // handle a request
-void requestHandle(int fd, stats_t* stats, double arrival_time, double dispatch_interval)
+void requestHandle(int fd, stats_t* stats, double* arrival_time, double* dispatch_interval)
 {
     // increase counter
     stats->handler_thread_req_count++;

@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
     while (1) {
 	clientlen = sizeof(clientaddr);
 	connfd = Accept(listenfd, (SA *)&clientaddr, (socklen_t *) &clientlen);
+    double arrival_time = Time_GetSeconds();
     pthread_mutex_lock(&mutex2);
     int is_overloaded = queue->queue_size + num_of_curr_working >= queue_size;
     pthread_mutex_unlock(&mutex2);
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
     }
 
     pthread_mutex_lock(&mutex);
-    enqueue(queue, connfd); // void* because we want the queue to hold NULL
+    enqueue(queue, connfd, arrival_time);
     pthread_mutex_unlock(&mutex);
     pthread_cond_signal(&cond);
     }
@@ -148,16 +149,26 @@ int handle_overloading(int connfd, Queue* queue, char* schedalg, int* queue_size
         pthread_mutex_unlock(&mutex2);
         return 0;
     }
+
     if(!strcmp(schedalg, "dt")){
         Close(connfd);
         return 1; //continue to next request
     }
+
     if(!strcmp(schedalg, "dh")){
         pthread_mutex_lock(&mutex);
-        dequeue(queue, NULL, NULL);
-        pthread_mutex_unlock(&mutex);
-        return 0; //add this request to queue
+        int connfd_to_close = dequeue(queue, NULL, NULL);
+        if(connfd_to_close == -1){
+            Close(connfd);
+            pthread_mutex_unlock(&mutex);
+            return 1;
+        } else{
+            Close(connfd_to_close);
+            pthread_mutex_unlock(&mutex);
+            return 0; //add this request to queue
+        }
     }
+
     if(!strcmp(schedalg, "bf")){
         pthread_mutex_lock(&mutex2);
         while(queue->queue_size + num_of_curr_working != 0){
@@ -166,6 +177,7 @@ int handle_overloading(int connfd, Queue* queue, char* schedalg, int* queue_size
         pthread_mutex_unlock(&mutex2);
         return 0;
     }
+
     if(!strcmp(schedalg, "dynamic")){
         Close(connfd);
         if(*queue_size < max_size){
@@ -173,17 +185,23 @@ int handle_overloading(int connfd, Queue* queue, char* schedalg, int* queue_size
         }
         return 1; //continue to next request
     }
+
     if(!strcmp(schedalg, "random")){
         int random_to_del;
         pthread_mutex_lock(&mutex);
         if(queue->queue_size == 0){
-            return 0;
+            pthread_mutex_unlock(&mutex);
+            Close(connfd);
+            return 1;
         }
-        int queue_size = queue->queue_size/2;
-        for (int i = 0; i < queue_size; i++)
+        int size_to_del = (queue->queue_size)/2;
+        int connfd_to_close;
+        for (int i = 0; i < size_to_del; i++)
         {
             random_to_del = rand()%((queue->queue_size)) + 1;
-            dequeue_i(queue, random_to_del);
+            printf("%d, %d\n", queue->queue_size, random_to_del);
+            connfd_to_close = dequeue_i(queue, random_to_del);
+            Close(connfd_to_close);
         }
         pthread_mutex_unlock(&mutex);
         return 0;

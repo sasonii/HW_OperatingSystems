@@ -22,8 +22,8 @@ typedef struct Queue {
 // Function prototypes
 Queue* createQueue();
 int isEmpty(Queue* queue);
-void enqueue(Queue* queue, int data);
+void enqueue(Queue* queue, int data, double arrival_time);
 int dequeue(Queue* queue, double* arrival_time, double* dispatch_time);
-void dequeue_i(Queue* queue, int i);
+int dequeue_i(Queue* queue, int i);
 
 #endif //WET_QUEUE_H

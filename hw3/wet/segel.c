@@ -565,4 +565,9 @@ int Open_listenfd(int port)
     return rc;
 }
 
+double Time_GetSeconds() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return (double) ((double)t.tv_sec + (double)t.tv_usec / 1e6);
+}
 

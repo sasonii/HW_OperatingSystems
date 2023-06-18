@@ -11,11 +11,7 @@ Queue* createQueue() {
     return queue;
 }
 
-double Time_GetSeconds() {
-    struct timeval t;
-    gettimeofday(&t, NULL);
-    return (double) ((double)t.tv_sec + (double)t.tv_usec / 1e6);
-}
+
 
 // Check if the queue is empty
 int isEmpty(Queue* queue) {
@@ -23,11 +19,11 @@ int isEmpty(Queue* queue) {
 }
 
 // Insert an element into the queue
-void enqueue(Queue* queue, int data) {
+void enqueue(Queue* queue, int data, double arrival_time) {
     Node* new_node = (Node*)malloc(sizeof(Node));
     new_node->data = data;
     new_node->next = NULL;
-    new_node->arrival_time = Time_GetSeconds();
+    new_node->arrival_time = arrival_time;
 
     if (isEmpty(queue)) {
         queue->front = queue->rear = new_node;
@@ -54,7 +50,7 @@ int dequeue(Queue* queue, double* arrival_time, double* dispatch_time) {
         *arrival_time = temp->arrival_time;
     }
     if(dispatch_time != NULL) {
-        *dispatch_time = temp->arrival_time - Time_GetSeconds();
+        *dispatch_time = Time_GetSeconds() - temp->arrival_time;
     }
 
     int result = temp->data;
@@ -63,19 +59,25 @@ int dequeue(Queue* queue, double* arrival_time, double* dispatch_time) {
     return result;
 }
 
-void dequeue_i(Queue* queue, int i){
+int dequeue_i(Queue* queue, int i){
     if(i > queue->queue_size){
-        return;
+        return -1;
     }
-    if((queue->queue_size == 1) & (i == 1)){
-        queue->front = queue->rear = NULL;
-        queue->queue_size = 0;
-        return;
+
+    if(i == 1){
+        int result = queue->front->data;
+        queue->front = queue->front->next;
+        if(queue->queue_size == 1){
+            queue->rear = NULL;
+        }
+        queue->queue_size--;
+        return result;
     }
     int curr = 1;
     Node* temp = queue->front;
     while(curr != i-1){
         temp = temp->next;
+        curr++;
     }
     Node* node_to_delete = temp->next;
     temp->next = node_to_delete->next;
@@ -83,7 +85,8 @@ void dequeue_i(Queue* queue, int i){
     if(i == queue->queue_size){
         queue->rear = temp;
     }
-
+    int result = node_to_delete->data;
     free(node_to_delete);
     queue->queue_size--;
+    return result;
 }

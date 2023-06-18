@@ -28,11 +28,9 @@ void getargs()
 
 double Time_GetSeconds() {
     struct timeval t;
-    int rc = gettimeofday(&t, NULL);
-    assert(rc == 0);
+    gettimeofday(&t, NULL);
     return (double) ((double)t.tv_sec + (double)t.tv_usec / 1e6);
 }
-
 
 int main(int argc, char *argv[])
 {

@@ -39,7 +39,7 @@ void requestError(int fd, char *cause, char *errnum, char *shortmsg, char *longm
     sprintf(buf, "Stat-Thread-Id:: %d\r\n", stats->handler_thread_id);
     Rio_writen(fd, buf, strlen(buf));
     printf("%s", buf);
-    sprintf(buf, "Stat-Thread -Count:: %d\r\n", stats->handler_thread_req_count);
+    sprintf(buf, "Stat-Thread-Count:: %d\r\n", stats->handler_thread_req_count);
     Rio_writen(fd, buf, strlen(buf));
     printf("%s", buf);
     sprintf(buf, "Stat-Thread-Static:: %d\r\n", stats->handler_thread_static_req_count);
@@ -131,9 +131,9 @@ void requestServeDynamic(int fd, char *filename, char *cgiargs, stats_t* stats, 
     sprintf(buf, "%sStat-Req-Arrival:: %.6f\r\n", buf, *arrival_time);
     sprintf(buf, "%sStat-Req-Dispatch:: %.6f\r\n", buf, *dispatch_interval);
     sprintf(buf, "%sStat-Thread-Id:: %d\r\n", buf, stats->handler_thread_id);
-    sprintf(buf, "%sStat-Thread -Count:: %d\r\n", buf, stats->handler_thread_req_count);
+    sprintf(buf, "%sStat-Thread-Count:: %d\r\n", buf, stats->handler_thread_req_count);
     sprintf(buf, "%sStat-Thread-Static:: %d\r\n", buf, stats->handler_thread_static_req_count);
-    sprintf(buf, "%sStat-Thread-Dynamic:: %d\r\n\r\n", buf, stats->handler_thread_dynamic_req_count);
+    sprintf(buf, "%sStat-Thread-Dynamic:: %d\r\n", buf, stats->handler_thread_dynamic_req_count);
    Rio_writen(fd, buf, strlen(buf));
    pid_t pid = Fork();
    if (pid == 0) {
@@ -170,7 +170,7 @@ void requestServeStatic(int fd, char *filename, int filesize, stats_t* stats, do
     sprintf(buf, "%sStat-Req-Arrival:: %.6f\r\n", buf, *arrival_time);
     sprintf(buf, "%sStat-Req-Dispatch:: %.6f\r\n", buf, *dispatch_interval);
     sprintf(buf, "%sStat-Thread-Id:: %d\r\n", buf, stats->handler_thread_id);
-    sprintf(buf, "%sStat-Thread -Count:: %d\r\n", buf, stats->handler_thread_req_count);
+    sprintf(buf, "%sStat-Thread-Count:: %d\r\n", buf, stats->handler_thread_req_count);
     sprintf(buf, "%sStat-Thread-Static:: %d\r\n", buf, stats->handler_thread_static_req_count);
     sprintf(buf, "%sStat-Thread-Dynamic:: %d\r\n\r\n", buf, stats->handler_thread_dynamic_req_count);
 

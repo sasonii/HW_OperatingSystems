@@ -120,6 +120,8 @@ int open_listenfd(int portno);
 
 /* Wrappers for client/server helper functions */
 int Open_clientfd(char *hostname, int port);
-int Open_listenfd(int port); 
+int Open_listenfd(int port);
+
+double Time_GetSeconds();
 
 #endif /* __CSAPP_H__ */

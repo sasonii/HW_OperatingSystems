@@ -16,6 +16,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t cond2 = PTHREAD_COND_INITIALIZER;
+
 int num_of_curr_working = 0;
 void *thread_func(void* args);
 int handle_overloading(int connfd, Queue* queue, char* schedalg, int* queue_size,int max_size);
@@ -175,7 +176,8 @@ int handle_overloading(int connfd, Queue* queue, char* schedalg, int* queue_size
             pthread_cond_wait(&cond2, &mutex2);//wait for queue to stop being full
         }
         pthread_mutex_unlock(&mutex2);
-        return 0;
+	Close(connfd);
+        return 1;
     }
 
     if(!strcmp(schedalg, "dynamic")){

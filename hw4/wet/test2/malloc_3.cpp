@@ -6,6 +6,9 @@
 #include <cstring>
 
 #define MAX_SIZE_TO_ALLOCATE 100000000
+#define MAX_ORDER 10
+
+
 
 void* smalloc(size_t size);
 void* scalloc(size_t num, size_t size);
@@ -21,6 +24,7 @@ size_t _size_meta_data();
 struct MallocMetadata {
     size_t size;
     bool is_free;
+    bool is_mmap;
     MallocMetadata* next;
     MallocMetadata* prev;
 };
@@ -28,15 +32,21 @@ struct MallocMetadata {
 class MemList {
 private:
     MallocMetadata* head;
+    MallocMetadata* freed[MAX_ORDER + 1];
+    MallocMetadata* allocated[MAX_ORDER + 1];
 public:
-MemList() : head(NULL) {}
-size_t GetNumberOfFreeBlocks();
-size_t GetNumberOfFreeBytes();
-size_t GetNumberOfAllocatedBlocks();
-size_t GetNumberOfAllocatedBytes();
-void* Malloc(size_t size);
-void Free(void* p);
-void* Srealloc(void* oldp, size_t size);
+    MemList() : head(NULL) {
+        for(int i = 0; i <= MAX_ORDER; i++){
+            freed[i] = NULL;
+        }
+    }
+    size_t GetNumberOfFreeBlocks();
+    size_t GetNumberOfFreeBytes();
+    size_t GetNumberOfAllocatedBlocks();
+    size_t GetNumberOfAllocatedBytes();
+    void* Malloc(size_t size);
+    void Free(void* p);
+    void* Srealloc(void* oldp, size_t size);
 };
 
 size_t MemList::GetNumberOfFreeBlocks() {
@@ -100,6 +110,20 @@ size_t MemList::GetNumberOfAllocatedBytes() {
 }
 
 void* MemList::Malloc(size_t size) {
+    if(head == NULL){
+        void* current = sbrk(0);
+
+        intptr_t alignmentOffset = (intptr_t)current % (32 * 128 * 1024);
+
+        size_t bytesToAlign = (alignmentOffset == 0) ? 0 : (32 * 128 * 1024) - alignmentOffset;
+
+        if (bytesToAlign > 0) {
+            void* alignedAddress = sbrk(bytesToAlign + 32 * 128 * 1024);
+        }
+        head = (MallocMetadata*) ((char*)current+bytesToAlign);
+
+    }
+
     MallocMetadata* curr_ptr = head;
     MallocMetadata* last_ptr = head;
 

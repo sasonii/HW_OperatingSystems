@@ -4,9 +4,10 @@
 
 #include "unistd.h"
 
+#define MAX_SIZE_TO_ALLOCATE 100000000
+
 void* smalloc(size_t size);
 
-#define MAX_SIZE_TO_ALLOCATE 100000000
 void* smalloc(size_t size){
     if(size == 0 || size > MAX_SIZE_TO_ALLOCATE){
         return NULL;

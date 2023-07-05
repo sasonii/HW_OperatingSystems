@@ -26,6 +26,6 @@ CMakeLists.txt
 /hw3/wet/public/
 /hw3/wet/output.cgi
 
-/hw4/wet/tests2/cmake-build-debug/
-/hw4/wet/tests2/build/
+/hw4/wet/test2/cmake-build-debug/*
+/hw4/wet/test2/build/*
 

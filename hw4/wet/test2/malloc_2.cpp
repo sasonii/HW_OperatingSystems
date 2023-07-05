@@ -81,17 +81,21 @@ size_t MemList::GetNumberOfAllocatedBlocks() {
 }
 
 size_t MemList::GetNumberOfAllocatedBytes() {
+    if(head == NULL){
+        return 0;
+    }
     MallocMetadata* curr_ptr = head;
     MallocMetadata* first_ptr = head;
     MallocMetadata* last_ptr = head;
 
-
+    int counter = 0;
     while(curr_ptr != NULL){
+        counter++;
         last_ptr = curr_ptr;
         curr_ptr = curr_ptr->next;
     }
     size_t num_bytes = static_cast<size_t>(reinterpret_cast<char*>(last_ptr) - reinterpret_cast<char*>(first_ptr)) + \
-                    sizeof(MallocMetadata) + last_ptr->size;
+                    + last_ptr->size - sizeof(MallocMetadata) * (counter-1);
 
     return num_bytes;
 }
@@ -101,7 +105,7 @@ void* MemList::Malloc(size_t size) {
     MallocMetadata* last_ptr = head;
 
     while(curr_ptr != NULL){
-        if(curr_ptr->is_free && curr_ptr->size <= size){
+        if(curr_ptr->is_free && size <= curr_ptr->size){
             curr_ptr->is_free = false;
 //            curr_ptr->in_use_size = size;
             return reinterpret_cast<void*>(curr_ptr + 1);
@@ -116,12 +120,23 @@ void* MemList::Malloc(size_t size) {
         return NULL;
     }
 
+
+
     curr_ptr = reinterpret_cast<MallocMetadata*> (previous_program_break);
     curr_ptr->is_free = false;
 //    curr_ptr->in_use_size = size;
     curr_ptr->size = size;
     curr_ptr->next = NULL;
     curr_ptr->prev = last_ptr;
+
+
+
+    if(head == NULL){
+        head = curr_ptr;
+    }
+    else {
+        last_ptr->next = curr_ptr;
+    }
 
     return reinterpret_cast<void*>(curr_ptr + 1);
 }
@@ -142,7 +157,7 @@ void* MemList::Srealloc(void* oldp, size_t size){
     if(addr == NULL){
         return NULL;
     }
-
+    std::memmove(addr, oldp, size);
     Free(oldp);
     return addr;
 }

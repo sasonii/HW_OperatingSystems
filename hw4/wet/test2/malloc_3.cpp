@@ -443,20 +443,25 @@ void MemList::Free(void* p){
 
 void* MemList::Srealloc(void* oldp, size_t size){
     MallocMetadata* start_ptr = reinterpret_cast<MallocMetadata*>(oldp) - 1;
+    size_t old_size =  start_ptr->size;
+    void* addr;
+
     if(size <= start_ptr->size){
         return oldp;
     }
 
     if(CheckIfUnionIsPossible(start_ptr, size)){
-        return reinterpret_cast<void*>(SreallocUnion(start_ptr, size) + 1);
+        addr = reinterpret_cast<void*>(SreallocUnion(start_ptr, size) + 1);
+        std::memmove(addr, oldp, old_size);
+        return addr;
     }
     
-    void* addr = Malloc(size);
+    addr = Malloc(size);
 
     if(addr == NULL){
         return NULL;
     }
-    std::memmove(addr, oldp, size);
+    std::memmove(addr, oldp, old_size);
     Free(oldp);
     return addr;
 }

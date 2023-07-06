@@ -1,36 +1,94 @@
-malloc_1.Sanity 1 0.00763774
-malloc_1.Check size 1 0.00782005
-malloc_1.0 size 1 0.00753304
-malloc_1.Max size 1 0.00724403
-malloc_2.Sanity 1 0.00685262
-malloc_2.Check size 1 0.00633971
-malloc_2.0 size 1 0.00539847
-malloc_2.Max size 1 0.00599429
-malloc_2.free 1 0.00522387
-malloc_2.free 2 1 0.00396673
-malloc_2.free 3 1 0.00440094
-malloc_2.Reuse 1 0.00409623
-malloc_2.Reuse two blocks 1 0.00360042
-malloc_2.Reuse two blocks reverse 1 0.00452095
-malloc_2.Reuse two blocks both 1 0.00362342
-malloc_2.Reuse two blocks sizes small 1 0.0030021
-malloc_2.Reuse two blocks sizes large 1 0.00410473
-malloc_2.scalloc 1 0.00278229
-malloc_2.scalloc taint 1 0.0031181
-malloc_2.scalloc 0 size 1 0.0031047
-malloc_2.scalloc Max size num 1 0.0511162
-malloc_2.scalloc Max size size 1 0.0509236
-malloc_2.scalloc Max size both 1 0.049405
-malloc_2.realloc 1 0.0032133
-malloc_2.realloc shrink 1 0.00242918
-malloc_2.srealloc Max size 1 0.00249008
-malloc_3.Challenge 0 - Memory Utilization 1 0.00237658
-malloc_3.test all sizes 1 0.00340881
-malloc_3.Finding buddies test 1 0.00417593
-malloc_3.multiple big allocs test 1 0.00478685
-malloc_3.Exit Test 1 0.00465535
-malloc_3.srealloc test 1 0.00434414
-malloc_3.scalloc test 1 0.00353411
-malloc_3.srealloc merges test 1 0.00411003
-malloc_3.weird values 1 0.006296
+malloc_1.Sanity 3 0.00714549
+malloc_1.Check 0 1
+malloc_1.0 0 1
+malloc_1.Max 0 1
+malloc_2.Sanity 3 0.00859797
+malloc_2.Check 0 1
+malloc_2.0 0 1
+malloc_2.Max 0 1
+malloc_2.free 4 0.00170561
+malloc_2.free 4 0.00170561
+malloc_2.free 4 0.00170561
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.realloc 1 0.00514408
+malloc_2.realloc 1 0.00514408
+malloc_2.srealloc 0 0
+malloc_3.Challenge 0 0
+malloc_3.test 0 0
+malloc_3.Finding 0 0
+malloc_3.multiple 0 0
+malloc_3.Exit 0 1
+malloc_3.srealloc 0 1
+malloc_3.scalloc 0 1
+malloc_3.srealloc 0 0
+malloc_3.weird 0 1
+malloc_1.Check 0 1
+malloc_1.0 0 1
+malloc_1.Max 0 1
+malloc_2.Check 0 1
+malloc_2.0 0 1
+malloc_2.Max 0 1
+malloc_2.free 4 0.00170561
+malloc_2.free 4 0.00170561
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.Reuse 1 0.0057256
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.scalloc 1 0.00714766
+malloc_2.realloc 1 0.00514408
+malloc_2.srealloc 0 0
+malloc_3.Challenge 0 0
+malloc_3.test 0 0
+malloc_3.Finding 0 0
+malloc_3.multiple 0 0
+malloc_3.Exit 0 1
+malloc_3.srealloc 0 1
+malloc_3.scalloc 0 1
+malloc_3.srealloc 0 0
+malloc_3.weird 0 1
+malloc_1.Check size 1 0.00936954
+malloc_1.0 size 1 0.00742217
+malloc_1.Max size 1 0.0083605
+malloc_2.Check size 1 0.00750037
+malloc_2.0 size 1 0.00530519
+malloc_2.Max size 1 0.00524169
+malloc_2.free 2 1 0.00702745
+malloc_2.free 3 1 0.00615802
+malloc_2.Reuse two blocks 1 0.00627672
+malloc_2.Reuse two blocks reverse 1 0.00540429
+malloc_2.Reuse two blocks both 1 0.00775598
+malloc_2.Reuse two blocks sizes small 1 0.00806189
+malloc_2.Reuse two blocks sizes large 1 0.00676164
+malloc_2.scalloc taint 1 0.00543879
+malloc_2.scalloc 0 size 1 0.00689565
+malloc_2.scalloc Max size num 1 0.0964355
+malloc_2.scalloc Max size size 1 0.108138
+malloc_2.scalloc Max size both 1 0.074094
+malloc_2.realloc shrink 1 0.00680894
+malloc_2.srealloc Max size 1 0.00582461
+malloc_3.Challenge 0 - Memory Utilization 1 0.0161948
+malloc_3.test all sizes 1 0.00616412
+malloc_3.Finding buddies test 1 0.00766048
+malloc_3.multiple big allocs test 1 0.00446716
+malloc_3.Exit Test 1 0.0055588
+malloc_3.srealloc test 1 0.00346142
+malloc_3.scalloc test 1 0.00405455
+malloc_3.srealloc merges test 1 0.0028528
+malloc_3.weird values 1 0.00299711
 ---

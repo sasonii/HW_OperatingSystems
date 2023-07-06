@@ -59,6 +59,9 @@ private:
     void UnionIfPossible(MallocMetadata* addr);
     void AddToFreeOrder(MallocMetadata* addr, int order);
 
+    bool CheckIfUnionIsPossible(MallocMetadata* addr, size_t size);
+    MallocMetadata* SreallocUnion(MallocMetadata* addr, size_t size);
+
 public:
     MemList() : head(NULL), MMAPhead(NULL), freed{}, EXPECTED_COOKIE_VALUE(generateRandomCookieValue()) {}
     size_t GetNumberOfFreeBlocks();
@@ -236,6 +239,84 @@ void MemList::UnionIfPossible(MallocMetadata* addr){
     AddToFreeOrder(addr, addr->order);
 }
 
+bool MemList::CheckIfUnionIsPossible(MallocMetadata* addr, size_t size){
+    MallocMetadata* buddy = (MallocMetadata*)((intptr_t)addr ^ pow2(addr->order) * START_SIZE);
+    MallocMetadata* fake_addr = addr;
+    MallocMetadata* fake_buddy = buddy;
+    MallocMetadata fake_addr_mm = *addr;
+    MallocMetadata fake_buddy_mm = *buddy;
+    
+    while(fake_buddy_mm.is_free && fake_buddy_mm.order < 10 && fake_addr_mm.size < size) {
+        if((fake_buddy_mm.cookie != EXPECTED_COOKIE_VALUE) || (fake_addr_mm.cookie != EXPECTED_COOKIE_VALUE)){
+            exit(0xdeadbeef);
+        }
+        if (fake_buddy > fake_addr) {
+            fake_addr_mm.next = fake_buddy->next;
+            fake_addr_mm.order++;
+            fake_addr_mm.size = pow2(fake_addr_mm.order) * START_SIZE - sizeof(MallocMetadata);
+
+            fake_buddy = (MallocMetadata*)((intptr_t)addr ^ pow2(fake_addr_mm.order) * START_SIZE);
+            fake_buddy_mm = *fake_buddy;
+        }
+        else{
+            fake_buddy_mm.next = fake_addr->next;
+            fake_buddy_mm.order++;
+            fake_buddy_mm.size = pow2(fake_buddy_mm.order) * START_SIZE - sizeof(MallocMetadata);
+            
+            fake_addr = fake_buddy;
+            fake_addr_mm = *fake_addr;
+            fake_buddy = (MallocMetadata*)((intptr_t)addr ^ pow2(fake_addr_mm.order) * START_SIZE);
+            fake_buddy_mm = *fake_buddy;
+        }
+    }
+
+    if(fake_addr_mm.size >= size){
+        return true;
+    }
+    return false;
+}
+
+MallocMetadata* MemList::SreallocUnion(MallocMetadata* addr, size_t size){
+    MallocMetadata* buddy = (MallocMetadata*)((intptr_t)addr ^ pow2(addr->order) * START_SIZE);
+    while(buddy->is_free && buddy->order < 10 && addr->size < size) {
+        if((buddy->cookie != EXPECTED_COOKIE_VALUE) || (addr->cookie != EXPECTED_COOKIE_VALUE)){
+            exit(0xdeadbeef);
+        }
+        if (buddy > addr) {
+            freed[buddy->order].remove(buddy);
+            freed[buddy->order].remove(addr);
+            addr->next = buddy->next;
+            addr->order++;
+            addr->size = pow2(addr->order) * START_SIZE - sizeof(MallocMetadata);
+            addr->is_free = true;
+
+            MallocMetadata *next_to_buddy = buddy->next;
+            if (next_to_buddy != NULL) {
+                next_to_buddy->prev = addr;
+            }
+            buddy = (MallocMetadata*)((intptr_t)addr ^ pow2(addr->order) * START_SIZE);
+        }
+        else{
+            freed[buddy->order].remove(buddy);
+            freed[buddy->order].remove(addr);
+            buddy->next = addr->next;
+            buddy->order++;
+            buddy->size = pow2(buddy->order) * START_SIZE - sizeof(MallocMetadata);
+            buddy->is_free = true;
+
+            MallocMetadata *next_to_buddy = addr->next;
+            if (next_to_buddy != NULL) {
+                next_to_buddy->prev = buddy;
+            }
+            addr = buddy;
+            buddy = (MallocMetadata*)((intptr_t)addr ^ pow2(addr->order) * START_SIZE);
+        }
+    }
+    addr->is_free = false;
+    AddToFreeOrder(buddy, addr->order);
+    return addr;
+}
+
 void MemList::AddToFreeOrder(MallocMetadata* addr, int order){
     std::list<MallocMetadata*>::iterator insertPosition = std::lower_bound(freed[order].begin(), freed[order].end(), addr);
     freed[order].insert(insertPosition, addr);
@@ -351,7 +432,7 @@ void MemList::Free(void* p){
             curr_ptr->next->prev = last_ptr;
         }
         if(curr_ptr->cookie != EXPECTED_COOKIE_VALUE){
-//            exit(0xdeadbeef);
+            exit(0xdeadbeef);
         }
         munmap(start_ptr, start_ptr->size + sizeof(MallocMetadata));
     }
@@ -362,15 +443,25 @@ void MemList::Free(void* p){
 
 void* MemList::Srealloc(void* oldp, size_t size){
     MallocMetadata* start_ptr = reinterpret_cast<MallocMetadata*>(oldp) - 1;
+    size_t old_size =  start_ptr->size;
+    void* addr;
+
     if(size <= start_ptr->size){
         return oldp;
     }
-    void* addr = Malloc(size);
+
+    if(CheckIfUnionIsPossible(start_ptr, size)){
+        addr = reinterpret_cast<void*>(SreallocUnion(start_ptr, size) + 1);
+        std::memmove(addr, oldp, old_size);
+        return addr;
+    }
+    
+    addr = Malloc(size);
 
     if(addr == NULL){
         return NULL;
     }
-    std::memmove(addr, oldp, size);
+    std::memmove(addr, oldp, old_size);
     Free(oldp);
     return addr;
 }

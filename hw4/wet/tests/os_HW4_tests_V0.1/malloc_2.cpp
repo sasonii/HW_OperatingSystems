@@ -145,7 +145,8 @@ void MemList::Free(void* p){
 
 void* MemList::Srealloc(void* oldp, size_t size){
     MallocMetadata* start_ptr = reinterpret_cast<MallocMetadata*>(oldp) - 1;
-    if(size <= start_ptr->size){
+    size_t old_size = start_ptr->size;
+    if(size <= old_size){
         return oldp;
     }
     void* addr = Malloc(size);
@@ -153,7 +154,7 @@ void* MemList::Srealloc(void* oldp, size_t size){
     if(addr == NULL){
         return NULL;
     }
-    std::memmove(addr, oldp, size);
+    std::memmove(addr, oldp, old_size);
     Free(oldp);
     return addr;
 }

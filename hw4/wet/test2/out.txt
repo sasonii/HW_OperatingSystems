@@ -1,0 +1,1234 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/student/Documents/HW_OperatingSystems/hw4/wet/test2/build
+[ 81%] Built target Catch2
+[ 84%] Built target Catch2WithMain
+[ 87%] Built target malloc_1_test
+[ 90%] Built target malloc_2_test
+[ 91%] Building CXX object tests/CMakeFiles/malloc_3_test.dir/__/malloc_3.cpp.o
+[ 92%] Linking CXX executable malloc_3_test
+[100%] Built target malloc_3_test
+vm.nr_hugepages = 102400
+Test project /home/student/Documents/HW_OperatingSystems/hw4/wet/test2/build/tests
+      Start  1: malloc_1.Sanity
+ 1/80 Test  #1: malloc_1.Sanity ..................................   Passed    0.01 sec
+      Start  2: malloc_1.Check size
+ 2/80 Test  #2: malloc_1.Check size ..............................   Passed    0.00 sec
+      Start  3: malloc_1.0 size
+ 3/80 Test  #3: malloc_1.0 size ..................................   Passed    0.00 sec
+      Start  4: malloc_1.Max size
+ 4/80 Test  #4: malloc_1.Max size ................................   Passed    0.00 sec
+      Start  5: malloc_2.Sanity
+ 5/80 Test  #5: malloc_2.Sanity ..................................   Passed    0.01 sec
+      Start  6: malloc_2.Check size
+ 6/80 Test  #6: malloc_2.Check size ..............................   Passed    0.00 sec
+      Start  7: malloc_2.0 size
+ 7/80 Test  #7: malloc_2.0 size ..................................   Passed    0.00 sec
+      Start  8: malloc_2.Max size
+ 8/80 Test  #8: malloc_2.Max size ................................   Passed    0.00 sec
+      Start  9: malloc_2.free
+ 9/80 Test  #9: malloc_2.free ....................................   Passed    0.00 sec
+      Start 10: malloc_2.free 2
+10/80 Test #10: malloc_2.free 2 ..................................   Passed    0.00 sec
+      Start 11: malloc_2.free 3
+11/80 Test #11: malloc_2.free 3 ..................................   Passed    0.00 sec
+      Start 12: malloc_2.Reuse
+12/80 Test #12: malloc_2.Reuse ...................................   Passed    0.00 sec
+      Start 13: malloc_2.Reuse two blocks
+13/80 Test #13: malloc_2.Reuse two blocks ........................   Passed    0.00 sec
+      Start 14: malloc_2.Reuse two blocks reverse
+14/80 Test #14: malloc_2.Reuse two blocks reverse ................   Passed    0.00 sec
+      Start 15: malloc_2.Reuse two blocks both
+15/80 Test #15: malloc_2.Reuse two blocks both ...................   Passed    0.00 sec
+      Start 16: malloc_2.Reuse two blocks sizes small
+16/80 Test #16: malloc_2.Reuse two blocks sizes small ............   Passed    0.00 sec
+      Start 17: malloc_2.Reuse two blocks sizes large
+17/80 Test #17: malloc_2.Reuse two blocks sizes large ............   Passed    0.00 sec
+      Start 18: malloc_2.scalloc
+18/80 Test #18: malloc_2.scalloc .................................   Passed    0.00 sec
+      Start 19: malloc_2.scalloc taint
+19/80 Test #19: malloc_2.scalloc taint ...........................   Passed    0.00 sec
+      Start 20: malloc_2.scalloc 0 size
+20/80 Test #20: malloc_2.scalloc 0 size ..........................   Passed    0.00 sec
+      Start 21: malloc_2.scalloc Max size num
+21/80 Test #21: malloc_2.scalloc Max size num ....................   Passed    0.07 sec
+      Start 22: malloc_2.scalloc Max size size
+22/80 Test #22: malloc_2.scalloc Max size size ...................   Passed    0.04 sec
+      Start 23: malloc_2.scalloc Max size both
+23/80 Test #23: malloc_2.scalloc Max size both ...................   Passed    0.05 sec
+      Start 24: malloc_2.realloc
+24/80 Test #24: malloc_2.realloc .................................   Passed    0.00 sec
+      Start 25: malloc_2.realloc shrink
+25/80 Test #25: malloc_2.realloc shrink ..........................   Passed    0.00 sec
+      Start 26: malloc_2.srealloc Max size
+26/80 Test #26: malloc_2.srealloc Max size .......................   Passed    0.00 sec
+      Start 27: malloc_3.Challenge 0 - Memory Utilization
+27/80 Test #27: malloc_3.Challenge 0 - Memory Utilization ........   Passed    0.00 sec
+      Start 28: malloc_3.test all sizes
+28/80 Test #28: malloc_3.test all sizes ..........................   Passed    0.00 sec
+      Start 29: malloc_3.Finding buddies test
+29/80 Test #29: malloc_3.Finding buddies test ....................   Passed    0.00 sec
+      Start 30: malloc_3.multiple big allocs test
+30/80 Test #30: malloc_3.multiple big allocs test ................   Passed    0.00 sec
+      Start 31: malloc_3.Exit Test
+31/80 Test #31: malloc_3.Exit Test ...............................   Passed    0.00 sec
+      Start 32: malloc_3.srealloc test
+32/80 Test #32: malloc_3.srealloc test ...........................   Passed    0.00 sec
+      Start 33: malloc_3.scalloc test
+33/80 Test #33: malloc_3.scalloc test ............................   Passed    0.00 sec
+      Start 34: malloc_3.srealloc merges test
+34/80 Test #34: malloc_3.srealloc merges test ....................   Passed    0.00 sec
+      Start 35: malloc_3.weird values
+35/80 Test #35: malloc_3.weird values ............................   Passed    0.00 sec
+      Start 36: malloc_3.Reuse
+36/80 Test #36: malloc_3.Reuse ...................................***Failed    0.00 sec
+Filters: Reuse
+Randomness seeded to: 2822043810
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:40
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:48: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 37: malloc_3.Reuse two blocks
+37/80 Test #37: malloc_3.Reuse two blocks ........................***Failed    0.00 sec
+Filters: Reuse two blocks
+Randomness seeded to: 2178408343
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse two blocks
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:67
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:75: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 38: malloc_3.Reuse two blocks reverse
+38/80 Test #38: malloc_3.Reuse two blocks reverse ................***Failed    0.00 sec
+Filters: Reuse two blocks reverse
+Randomness seeded to: 3041387495
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse two blocks reverse
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:104
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:112: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 39: malloc_3.Reuse two blocks both
+39/80 Test #39: malloc_3.Reuse two blocks both ...................***Failed    0.00 sec
+Filters: Reuse two blocks both
+Randomness seeded to: 3318802178
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse two blocks both
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:141
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:149: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 40: malloc_3.Reuse two blocks sizes small
+40/80 Test #40: malloc_3.Reuse two blocks sizes small ............***Failed    0.00 sec
+Filters: Reuse two blocks sizes small
+Randomness seeded to: 2537612902
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse two blocks sizes small
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:188
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:196: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 41: malloc_3.Reuse two blocks sizes small reversed
+41/80 Test #41: malloc_3.Reuse two blocks sizes small reversed ...***Failed    0.00 sec
+Filters: Reuse two blocks sizes small reversed
+Randomness seeded to: 1005272753
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse two blocks sizes small reversed
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:235
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:243: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  41 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 42: malloc_3.Reuse two blocks sizes large
+42/80 Test #42: malloc_3.Reuse two blocks sizes large ............***Failed    0.00 sec
+Filters: Reuse two blocks sizes large
+Randomness seeded to: 620436095
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Reuse two blocks sizes large
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:282
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_reuse.cpp:290: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 43: malloc_3.scalloc
+43/80 Test #43: malloc_3.scalloc .................................***Failed    0.00 sec
+Filters: scalloc
+Randomness seeded to: 1330118602
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+scalloc
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:40
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:52: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases:  1 |  0 passed | 1 failed
+assertions: 17 | 16 passed | 1 failed
+
+
+      Start 44: malloc_3.scalloc taint
+44/80 Test #44: malloc_3.scalloc taint ...........................***Failed    0.00 sec
+Filters: scalloc taint
+Randomness seeded to: 2642051516
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+scalloc taint
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:73
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:85: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  40 == 1
+
+===============================================================================
+test cases:   1 |   0 passed | 1 failed
+assertions: 107 | 106 passed | 1 failed
+
+
+      Start 45: malloc_3.scalloc 0 size
+45/80 Test #45: malloc_3.scalloc 0 size ..........................   Passed    0.00 sec
+      Start 46: malloc_3.scalloc Max size num
+46/80 Test #46: malloc_3.scalloc Max size num ....................***Failed    0.04 sec
+Filters: scalloc Max size num
+Randomness seeded to: 4117006829
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+scalloc Max size num
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:131
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:138: FAILED:
+  REQUIRE( 0 == (size_t)after - (size_t)base )
+with expansion:
+  0 == 6975488 (0x6a7000)
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 47: malloc_3.scalloc Max size size
+47/80 Test #47: malloc_3.scalloc Max size size ...................***Failed    0.04 sec
+Filters: scalloc Max size size
+Randomness seeded to: 2337299776
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+scalloc Max size size
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:154
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:161: FAILED:
+  REQUIRE( 0 == (size_t)after - (size_t)base )
+with expansion:
+  0 == 6328320 (0x609000)
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 48: malloc_3.scalloc Max size both
+48/80 Test #48: malloc_3.scalloc Max size both ...................***Failed    0.04 sec
+Filters: scalloc Max size both
+Randomness seeded to: 3425375080
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+scalloc Max size both
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:177
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_scalloc.cpp:184: FAILED:
+  REQUIRE( 0 == (size_t)after - (size_t)base )
+with expansion:
+  0 == 4739072 (0x485000)
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 49: malloc_3.Split block
+49/80 Test #49: malloc_3.Split block .............................***Failed    0.00 sec
+Filters: Split block
+Randomness seeded to: 2156855374
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Split block
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:40
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:46: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  40 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 50: malloc_3.Split block under threshold
+50/80 Test #50: malloc_3.Split block under threshold .............***Failed    0.00 sec
+Filters: Split block under threshold
+Randomness seeded to: 65498698
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Split block under threshold
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:64
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:70: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  41 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 51: malloc_3.Split block threshold
+51/80 Test #51: malloc_3.Split block threshold ...................***Failed    0.00 sec
+Filters: Split block threshold
+Randomness seeded to: 2170242015
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Split block threshold
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:88
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:94: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  41 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 52: malloc_3.Merge with prev block
+52/80 Test #52: malloc_3.Merge with prev block ...................***Failed    0.00 sec
+Filters: Merge with prev block
+Randomness seeded to: 111517480
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Merge with prev block
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:112
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:118: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 53: malloc_3.Merge with prev block pad
+53/80 Test #53: malloc_3.Merge with prev block pad ...............***Failed    0.00 sec
+Filters: Merge with prev block pad
+Randomness seeded to: 66903071
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Merge with prev block pad
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:136
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:143: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 54: malloc_3.Merge with next block
+54/80 Test #54: malloc_3.Merge with next block ...................***Failed    0.00 sec
+Filters: Merge with next block
+Randomness seeded to: 3236697552
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Merge with next block
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:179
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:185: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 55: malloc_3.Merge with next block pad
+55/80 Test #55: malloc_3.Merge with next block pad ...............***Failed    0.00 sec
+Filters: Merge with next block pad
+Randomness seeded to: 3024825700
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Merge with next block pad
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:203
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:210: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 56: malloc_3.Merge with both blocks
+56/80 Test #56: malloc_3.Merge with both blocks ..................***Failed    0.00 sec
+Filters: Merge with both blocks
+Randomness seeded to: 4148588877
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Merge with both blocks
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:246
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:252: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 57: malloc_3.Merge with both blocks pad
+57/80 Test #57: malloc_3.Merge with both blocks pad ..............***Failed    0.00 sec
+Filters: Merge with both blocks pad
+Randomness seeded to: 1892444639
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Merge with both blocks pad
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:281
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_split_and_merge.cpp:288: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 58: malloc_3.realloc
+58/80 Test #58: malloc_3.realloc .................................***Failed    0.00 sec
+Filters: realloc
+Randomness seeded to: 2049098925
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+realloc
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc.cpp:40
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc.cpp:53: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 59: malloc_3.realloc shrink
+59/80 Test #59: malloc_3.realloc shrink ..........................***Failed    0.00 sec
+Filters: realloc shrink
+Randomness seeded to: 4084852600
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+realloc shrink
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc.cpp:72
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc.cpp:85: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  41 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 60: malloc_3.srealloc Max size
+60/80 Test #60: malloc_3.srealloc Max size .......................***Failed    0.00 sec
+Filters: srealloc Max size
+Randomness seeded to: 1734062098
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc Max size
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc.cpp:104
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc.cpp:111: FAILED:
+  REQUIRE( 0 == (size_t)after - (size_t)base )
+with expansion:
+  0 == 7172096 (0x6d7000)
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 61: malloc_3.srealloc case a
+61/80 Test #61: malloc_3.srealloc case a .........................***Failed    0.00 sec
+Filters: srealloc case a
+Randomness seeded to: 3730955373
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case a
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:58
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:65: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 62: malloc_3.srealloc case a split
+62/80 Test #62: malloc_3.srealloc case a split ...................***Failed    0.00 sec
+Filters: srealloc case a split
+Randomness seeded to: 4199628623
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case a split
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:98
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:105: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  41 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 63: malloc_3.srealloc case a mmap
+63/80 Test #63: malloc_3.srealloc case a mmap ....................***Failed    0.00 sec
+Filters: srealloc case a mmap
+Randomness seeded to: 3247687252
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case a mmap
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:121
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:128: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  33 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 64: malloc_3.srealloc case b
+64/80 Test #64: malloc_3.srealloc case b .........................***Failed    0.00 sec
+Filters: srealloc case b
+Randomness seeded to: 1540899807
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case b
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:151
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:162: FAILED:
+  REQUIRE( _num_allocated_blocks() == 3 )
+with expansion:
+  43 == 3
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 9 | 8 passed | 1 failed
+
+
+      Start 65: malloc_3.srealloc case b metadata
+65/80 Test #65: malloc_3.srealloc case b metadata ................***Failed    0.00 sec
+Filters: srealloc case b metadata
+Randomness seeded to: 2823145189
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case b metadata
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:190
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:201: FAILED:
+  REQUIRE( _num_allocated_blocks() == 3 )
+with expansion:
+  43 == 3
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 9 | 8 passed | 1 failed
+
+
+      Start 66: malloc_3.srealloc case b split
+66/80 Test #66: malloc_3.srealloc case b split ...................***Failed    0.00 sec
+Filters: srealloc case b split
+Randomness seeded to: 3605545700
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case b split
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:222
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:233: FAILED:
+  REQUIRE( _num_allocated_blocks() == 3 )
+with expansion:
+  42 == 3
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 9 | 8 passed | 1 failed
+
+
+      Start 67: malloc_3.srealloc case b wilderness
+67/80 Test #67: malloc_3.srealloc case b wilderness ..............***Failed    0.00 sec
+Filters: srealloc case b wilderness
+Randomness seeded to: 620190447
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case b wilderness
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:255
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:264: FAILED:
+  REQUIRE( _num_allocated_blocks() == 2 )
+with expansion:
+  42 == 2
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 8 | 7 passed | 1 failed
+
+
+      Start 68: malloc_3.srealloc case b wilderness 2
+68/80 Test #68: malloc_3.srealloc case b wilderness 2 ............***Failed    0.00 sec
+Filters: srealloc case b wilderness 2
+Randomness seeded to: 3350616314
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case b wilderness 2
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:284
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:293: FAILED:
+  REQUIRE( _num_allocated_blocks() == 2 )
+with expansion:
+  42 == 2
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 8 | 7 passed | 1 failed
+
+
+      Start 69: malloc_3.srealloc case c
+69/80 Test #69: malloc_3.srealloc case c .........................***Failed    0.00 sec
+Filters: srealloc case c
+Randomness seeded to: 571352794
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case c
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:313
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:320: FAILED:
+  REQUIRE( _num_allocated_blocks() == 1 )
+with expansion:
+  42 == 1
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 7 | 6 passed | 1 failed
+
+
+      Start 70: malloc_3.srealloc case c 2
+70/80 Test #70: malloc_3.srealloc case c 2 .......................***Failed    0.00 sec
+Filters: srealloc case c 2
+Randomness seeded to: 2903224625
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case c 2
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:336
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:345: FAILED:
+  REQUIRE( _num_allocated_blocks() == 2 )
+with expansion:
+  42 == 2
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 8 | 7 passed | 1 failed
+
+
+      Start 71: malloc_3.srealloc case d
+71/80 Test #71: malloc_3.srealloc case d .........................***Failed    0.00 sec
+Filters: srealloc case d
+Randomness seeded to: 2808312490
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case d
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:365
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:376: FAILED:
+  REQUIRE( _num_allocated_blocks() == 3 )
+with expansion:
+  43 == 3
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 9 | 8 passed | 1 failed
+
+
+      Start 72: malloc_3.srealloc case d metadata
+72/80 Test #72: malloc_3.srealloc case d metadata ................***Failed    0.00 sec
+Filters: srealloc case d metadata
+Randomness seeded to: 3260308078
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case d metadata
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:407
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:418: FAILED:
+  REQUIRE( _num_allocated_blocks() == 3 )
+with expansion:
+  43 == 3
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 9 | 8 passed | 1 failed
+
+
+      Start 73: malloc_3.srealloc case d split
+73/80 Test #73: malloc_3.srealloc case d split ...................***Failed    0.00 sec
+Filters: srealloc case d split
+Randomness seeded to: 3398723639
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case d split
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:442
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:453: FAILED:
+  REQUIRE( _num_allocated_blocks() == 3 )
+with expansion:
+  42 == 3
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 9 | 8 passed | 1 failed
+
+
+      Start 74: malloc_3.srealloc case e
+74/80 Test #74: malloc_3.srealloc case e .........................***Failed    0.00 sec
+Filters: srealloc case e
+Randomness seeded to: 1318730232
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case e
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:478
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:495: FAILED:
+  REQUIRE( _num_allocated_blocks() == 5 )
+with expansion:
+  45 == 5
+
+===============================================================================
+test cases:  1 |  0 passed | 1 failed
+assertions: 11 | 10 passed | 1 failed
+
+
+      Start 75: malloc_3.srealloc case e no pad
+75/80 Test #75: malloc_3.srealloc case e no pad ..................***Failed    0.00 sec
+Filters: srealloc case e no pad
+Randomness seeded to: 1292184623
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case e no pad
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:521
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:536: FAILED:
+  REQUIRE( _num_allocated_blocks() == 4 )
+with expansion:
+  43 == 4
+
+===============================================================================
+test cases:  1 | 1 failed
+assertions: 10 | 9 passed | 1 failed
+
+
+      Start 76: malloc_3.srealloc case e split
+76/80 Test #76: malloc_3.srealloc case e split ...................***Failed    0.00 sec
+Filters: srealloc case e split
+Randomness seeded to: 285478056
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case e split
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:561
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:579: FAILED:
+  REQUIRE( _num_allocated_blocks() == 5 )
+with expansion:
+  43 == 5
+
+===============================================================================
+test cases:  1 |  0 passed | 1 failed
+assertions: 11 | 10 passed | 1 failed
+
+
+      Start 77: malloc_3.srealloc case fi
+77/80 Test #77: malloc_3.srealloc case fi ........................***Failed    0.00 sec
+Filters: srealloc case fi
+Randomness seeded to: 947032296
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case fi
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:605
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:620: FAILED:
+  REQUIRE( _num_allocated_blocks() == 4 )
+with expansion:
+  43 == 4
+
+===============================================================================
+test cases:  1 | 1 failed
+assertions: 10 | 9 passed | 1 failed
+
+
+      Start 78: malloc_3.srealloc case fii
+78/80 Test #78: malloc_3.srealloc case fii .......................***Failed    0.00 sec
+Filters: srealloc case fii
+Randomness seeded to: 1497973861
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case fii
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:645
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:660: FAILED:
+  REQUIRE( _num_allocated_blocks() == 4 )
+with expansion:
+  43 == 4
+
+===============================================================================
+test cases:  1 | 1 failed
+assertions: 10 | 9 passed | 1 failed
+
+
+      Start 79: malloc_3.srealloc case g
+79/80 Test #79: malloc_3.srealloc case g .........................***Failed    0.00 sec
+Filters: srealloc case g
+Randomness seeded to: 2002517245
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case g
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:688
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:706: FAILED:
+  REQUIRE( _num_allocated_blocks() == 5 )
+with expansion:
+  44 == 5
+
+===============================================================================
+test cases:  1 |  0 passed | 1 failed
+assertions: 11 | 10 passed | 1 failed
+
+
+      Start 80: malloc_3.srealloc case h
+80/80 Test #80: malloc_3.srealloc case h .........................***Failed    0.00 sec
+Filters: srealloc case h
+Randomness seeded to: 2460341504
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+malloc_3_test is a Catch2 v3.0.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+srealloc case h
+-------------------------------------------------------------------------------
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:732
+...............................................................................
+
+/home/student/Documents/HW_OperatingSystems/hw4/wet/test2/tests/malloc_3_test_srealloc_cases.cpp:750: FAILED:
+  REQUIRE( _num_allocated_blocks() == 5 )
+with expansion:
+  44 == 5
+
+===============================================================================
+test cases:  1 |  0 passed | 1 failed
+assertions: 11 | 10 passed | 1 failed
+
+
+
+45% tests passed, 44 tests failed out of 80
+
+Total Test time (real) =   0.52 sec
+
+The following tests FAILED:
+	 36 - malloc_3.Reuse (Failed)
+	 37 - malloc_3.Reuse two blocks (Failed)
+	 38 - malloc_3.Reuse two blocks reverse (Failed)
+	 39 - malloc_3.Reuse two blocks both (Failed)
+	 40 - malloc_3.Reuse two blocks sizes small (Failed)
+	 41 - malloc_3.Reuse two blocks sizes small reversed (Failed)
+	 42 - malloc_3.Reuse two blocks sizes large (Failed)
+	 43 - malloc_3.scalloc (Failed)
+	 44 - malloc_3.scalloc taint (Failed)
+	 46 - malloc_3.scalloc Max size num (Failed)
+	 47 - malloc_3.scalloc Max size size (Failed)
+	 48 - malloc_3.scalloc Max size both (Failed)
+	 49 - malloc_3.Split block (Failed)
+	 50 - malloc_3.Split block under threshold (Failed)
+	 51 - malloc_3.Split block threshold (Failed)
+	 52 - malloc_3.Merge with prev block (Failed)
+	 53 - malloc_3.Merge with prev block pad (Failed)
+	 54 - malloc_3.Merge with next block (Failed)
+	 55 - malloc_3.Merge with next block pad (Failed)
+	 56 - malloc_3.Merge with both blocks (Failed)
+	 57 - malloc_3.Merge with both blocks pad (Failed)
+	 58 - malloc_3.realloc (Failed)
+	 59 - malloc_3.realloc shrink (Failed)
+	 60 - malloc_3.srealloc Max size (Failed)
+	 61 - malloc_3.srealloc case a (Failed)
+	 62 - malloc_3.srealloc case a split (Failed)
+	 63 - malloc_3.srealloc case a mmap (Failed)
+	 64 - malloc_3.srealloc case b (Failed)
+	 65 - malloc_3.srealloc case b metadata (Failed)
+	 66 - malloc_3.srealloc case b split (Failed)
+	 67 - malloc_3.srealloc case b wilderness (Failed)
+	 68 - malloc_3.srealloc case b wilderness 2 (Failed)
+	 69 - malloc_3.srealloc case c (Failed)
+	 70 - malloc_3.srealloc case c 2 (Failed)
+	 71 - malloc_3.srealloc case d (Failed)
+	 72 - malloc_3.srealloc case d metadata (Failed)
+	 73 - malloc_3.srealloc case d split (Failed)
+	 74 - malloc_3.srealloc case e (Failed)
+	 75 - malloc_3.srealloc case e no pad (Failed)
+	 76 - malloc_3.srealloc case e split (Failed)
+	 77 - malloc_3.srealloc case fi (Failed)
+	 78 - malloc_3.srealloc case fii (Failed)
+	 79 - malloc_3.srealloc case g (Failed)
+	 80 - malloc_3.srealloc case h (Failed)
